@@ -1,0 +1,35 @@
+{
+  "name": "@healthcare/auth",
+  "module": "src/index.ts",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun --bun --watch src/index.ts",
+    "start": "bun --bun src/index.ts",
+    "build": "tsc && bun run build:dts && bun build src/index.ts --production --sourcemap --format=esm --minify-whitespace --minify-syntax --no-compile-autoload-package-json --no-compile-autoload-tsconfig --bytecode --compile --target=bun --outfile index",
+    "auth:generate": "bunx --bun @better-auth/cli@1.4.5 generate --config src/auth/configuration/auth-configuration.ts --output ../../database/src/auth/schema/auth-schema.ts && prettier --write ../../database/src/auth/schema/auth-schema.ts",
+    "build:dts": "bun run scripts/generate-dts-bundle.ts"
+  },
+  "dependencies": {
+    "@bogeychan/elysia-logger": "0.1.10",
+    "@elysiajs/openapi": "1.4.14",
+    "@healthcare/database": "workspace:*",
+    "@healthcare/shared": "workspace:*",
+    "better-auth": "1.4.20",
+    "drizzle-zod": "0.8.3",
+    "dts-bundle-generator": "9.5.1",
+    "elysia": "1.4.26",
+    "pino": "10.3.1",
+    "validation-better-auth": "1.3.4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "overrides": {
+    "better-sqlite3": "npm:npm-empty-package@1.0.0"
+  }
+}

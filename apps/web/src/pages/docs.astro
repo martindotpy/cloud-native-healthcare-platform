@@ -1,0 +1,51 @@
+---
+import Layout from "@healthcare/web/core/components/layouts/Layout.astro"
+import { ScalarComponent } from "@scalar/astro"
+
+// Context
+export const prerender = true
+---
+
+<Layout
+  title="OpenAPI Documentation"
+  description="Explore the OpenAPI documentation for all services."
+>
+  <ScalarComponent
+    configuration={{
+      theme: "deepSpace",
+      sources: [
+        {
+          title: "Auth",
+          url: "/api/auth/openapi.json",
+        },
+        {
+          title: "Appointment",
+          url: "/api/appointment/openapi.json",
+        },
+      ],
+      customCss: `
+        .dark-mode {
+          --scalar-background-1: oklch(0.2161 0.0061 56.0434);
+          --scalar-background-2: oklch(0.2291 0.006 56.0708);
+        }
+
+        .light-mode {
+          --scalar-background-1: oklch(0.9779 0.0042 56.3756);
+          --scalar-background-2: oklch(0.9431 0.0068 53.4442);
+        }
+      `,
+    }}
+  />
+</Layout>
+
+<style>
+  @reference "@healthcare/web/styles";
+
+  :root {
+    --scalar-font: var(--default-font-family);
+  }
+
+  html {
+    @apply no-scrollbar;
+  }
+</style>

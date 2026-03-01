@@ -1,0 +1,157 @@
+---
+import Styles from "@healthcare/web/core/components/atoms/Styles.astro"
+import Sonner from "@healthcare/web/core/components/molecules/Sonner.astro"
+import {
+  site,
+  siteUrl,
+} from "@healthcare/web/core/configuration/app-configuration"
+import {
+  appName,
+  author,
+  defaultDescription,
+} from "@healthcare/web/core/constant/seo-constant"
+import { getOpengraphImagePath } from "@healthcare/web/core/kit/opengraph-kit"
+import { getTitle } from "@healthcare/web/core/kit/title-kit"
+import { pwaAssetsHead } from "virtual:pwa-assets/head"
+import { pwaInfo } from "virtual:pwa-info"
+
+// Context
+interface Props {
+  title?: string
+  description?: string
+  keywords?: string
+}
+
+const { title, description = defaultDescription, keywords } = Astro.props
+
+// Title
+const fullTitle = getTitle(title)
+
+// Site
+const { url } = Astro
+
+// Url
+const { hostname } = Astro.url
+const isProdHostname = hostname === siteUrl.hostname
+
+// Open graph image
+let ogImageUrl = getOpengraphImagePath({ url, site: siteUrl })
+---
+
+<!doctype html>
+<html lang="es" class="dark" style="color-scheme: dark;">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{fullTitle}</title>
+
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap"
+      href="/sitemap-index.xml"
+    />
+    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="robots" content="index, follow" />
+
+    <meta name="author" content={author} />
+    {keywords && <meta name="keywords" content={keywords} />}
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={url} />
+
+    <meta property="og:site_name" content="Healthcare Platform" />
+    <meta property="og:url" content={site} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:locale" content="es" />
+    <meta property="og:description" content={description} />
+    <slot name="og:image">
+      <meta property="og:image" content={ogImageUrl} />
+    </slot>
+    <slot name="og:image:alt">
+      <meta property="og:image:alt" content={appName} />
+    </slot>
+    <slot name="og:image:width">
+      <meta property="og:image:width" content="1200" />
+    </slot>
+    <slot name="og:image:height">
+      <meta property="og:image:height" content="630" />
+    </slot>
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:domain" content={site.replace("https://", "")} />
+    <meta name="twitter:url" content={site} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <slot name="twitter:image">
+      <meta name="twitter:image" content={ogImageUrl} />
+    </slot>
+    <slot name="twitter:image:alt">
+      <meta name="twitter:image:alt" content={appName} />
+    </slot>
+    <slot name="twitter:image:width">
+      <meta name="twitter:image:width" content="1200" />
+    </slot>
+    <slot name="twitter:image:height">
+      <meta name="twitter:image:height" content="630" />
+    </slot>
+
+    {
+      pwaAssetsHead.themeColor && (
+        <>
+          <meta name="theme-color" content={pwaAssetsHead.themeColor.content} />
+          <meta
+            name="msapplication-TileColor"
+            content={pwaAssetsHead.themeColor.content}
+          />
+        </>
+      )
+    }
+
+    <meta name="msapplication-TileImage" content="/pwa-150x150.png" />
+    {
+      pwaAssetsHead.links.map((link) => (
+        <link
+          id={link.id}
+          rel={link.rel}
+          href={link.href}
+          sizes={link.sizes}
+          media={link.media}
+          type={link.type}
+        />
+      ))
+    }
+
+    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+
+    <slot name="head" />
+
+    {/* Styles */}
+    <Styles />
+
+    {/* Scripts */}
+    <Sonner />
+    <script src="@healthcare/web/pwa.ts"></script>
+    <script src="@healthcare/web/core/scripts/cloudflare-email-decoder.ts"
+    ></script>
+    {
+      isProdHostname && (
+        <script
+          is:inline
+          defer
+          id="umami-script"
+          src="https://analytics.martindotpy.dev/script.js"
+          data-website-id="f53b2f4b-0275-4103-9f6d-2c82f21514ab"
+        />
+      )
+    }
+    <script src="@healthcare/web/core/scripts/umami-identify.ts"></script>
+  </head>
+
+  <body class="flex min-h-dvh flex-col">
+    <slot />
+  </body>
+</html>

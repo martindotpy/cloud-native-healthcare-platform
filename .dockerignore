@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Build
+dist/
+build/
+target/
+
+# Testing
+coverage/
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Env files
+.env*
+
+# Misc
+.DS_Store
+*.pem
+
+# Executables
+*.exe
+services/**/index
+services/**/index.js.map
+
+# Astro
+.astro/
+
+# Tanstack
+.tanstack/
+
+# Quarkus
+.quarkus/
+
+# Intellij
+.idea/
+
+# Misc
+.DS_Store
+*.exe

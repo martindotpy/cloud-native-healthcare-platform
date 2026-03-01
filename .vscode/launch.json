@@ -1,0 +1,57 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "name": "Healthcare (web) 🐞",
+      "request": "launch",
+      "command": "bun run dev",
+      "cwd": "${workspaceFolder}/apps/web",
+      "serverReadyAction": {
+        "action": "debugWithChrome",
+        "pattern": "localhost:([0-9]+)",
+        "uriFormat": "http://localhost:%s",
+        "webRoot": "${workspaceFolder}/apps/web",
+        "killOnServerStop": true
+      },
+      "internalConsoleOptions": "neverOpen",
+      "presentation": {
+        "hidden": true
+      }
+    },
+    {
+      "type": "bun",
+      "name": "Healthcare (auth) 🐞",
+      "request": "launch",
+      "program": "dev",
+      "cwd": "${workspaceFolder}/services/auth",
+      "internalConsoleOptions": "neverOpen",
+      "presentation": {
+        "hidden": true
+      }
+    },
+    {
+      "type": "java",
+      "name": "Healthcare (appointment 🐞)",
+      "request": "attach",
+      "preLaunchTask": "appointment:dev",
+      "hostName": "localhost",
+      "port": 5005,
+      "presentation": {
+        "hidden": true
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Healthcare 🐞",
+      "configurations": [
+        "Healthcare (web) 🐞",
+        "Healthcare (auth) 🐞",
+        "Healthcare (appointment 🐞)"
+      ],
+      "preLaunchTask": "docker:dev",
+      "stopAll": true
+    }
+  ]
+}

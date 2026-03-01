@@ -1,0 +1,55 @@
+{
+  // Spell checker
+  "cSpell.words": [
+    "Cayetano",
+    "elysia",
+    "elysiajs",
+    "Heredia",
+    "sonner",
+    "Umami"
+  ],
+
+  // Javascript
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+
+  // Tailwindcss
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.classFunctions": [
+    "tw",
+    "twi",
+    "twj",
+    "tv",
+    "cn",
+    "clsx",
+    "twMerge",
+    "cva"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    // Includ spread operator for twj
+    "\\.\\.\\.\\s*twj`([\\s\\S]*?)`"
+  ],
+  "tailwindCSS.classAttributes": [
+    "class=*",
+    "class:list=*",
+    ".*Classname(s?)*",
+    ".*Classname(s?): .*"
+  ],
+
+  // MicroProfile
+  "microprofile.tools.validation.unknown.excluded": [
+    "*/mp-rest/providers/*/priority",
+    "mp.openapi.schema.*",
+    "kafka-streams.*",
+    "camel.*",
+    "mp.openapi.extensions.smallrye.property-naming-strategy"
+  ],
+
+  // Yaml
+  "yaml.schemas": {
+    "microprofile://schema/file:///Users/alexr/dev/cloud-native-healthcare-platform/services/appointment/src/main/resources/application.yml": "file:///Users/alexr/dev/cloud-native-healthcare-platform/services/appointment/src/main/resources/application.yml"
+  },
+  "java.compile.nullAnalysis.mode": "automatic"
+}

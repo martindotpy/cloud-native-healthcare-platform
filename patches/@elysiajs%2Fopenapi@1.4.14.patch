@@ -1,0 +1,301 @@
+diff --git a/dist/cjs/gen/index.js b/dist/cjs/gen/index.js
+index 61d7b8d11ce5c72cf48b21a1ad8d2c87aa810cc3..8f14a41ddc12af5cf560da5fff4945bd8657a228 100644
+--- a/dist/cjs/gen/index.js
++++ b/dist/cjs/gen/index.js
+@@ -8987,6 +8987,7 @@ function TypeBox(...args) {
+ }
+ 
+ // src/gen/index.ts
++var import_dts_bundle_generator = require("dts-bundle-generator");
+ var matchRoute = /: Elysia<(.*)>/gs;
+ var numberKey = /(\d+):/g;
+ var join = (...parts) => parts.join("/").replace(/\/{1,}/g, "/");
+@@ -9131,52 +9132,18 @@ var fromTypes = (targetFilePath = "src/index.ts", {
+         throw new Error(
+           "[@elysiajs/openapi/gen] `fromTypes` declaration generation require child_process.spawnSync which is not available in this environment"
+         );
+-      spawnSync(`tsc`, {
+-        shell: true,
+-        cwd: tmpRoot,
+-        stdio: silent ? void 0 : "inherit"
+-      });
+-      const fileName = targetFilePath.replace(/.tsx$/, ".ts").replace(/.ts$/, ".d.ts");
+-      targetFile = (overrideOutputPath ? typeof overrideOutputPath === "string" ? overrideOutputPath.startsWith("/") ? overrideOutputPath : join(tmpRoot, "dist", overrideOutputPath) : overrideOutputPath(tmpRoot) : void 0) ?? join(
+-        tmpRoot,
+-        "dist",
+-        // remove leading like src or something similar
+-        fileName.slice(fileName.indexOf("/") + 1)
+-      );
+-      let existed = fs.existsSync(targetFile);
+-      if (!existed && !overrideOutputPath) {
+-        targetFile = join(
+-          tmpRoot,
+-          "dist",
+-          // use original file name as-is eg. in monorepo
+-          fileName
+-        );
+-        existed = fs.existsSync(targetFile);
+-      }
+-      if (!existed) {
+-        fs.rmSync(join(tmpRoot, "tsconfig.json"));
+-        console.warn(
+-          "[@elysiajs/openapi/gen] Failed to generate OpenAPI schema"
+-        );
+-        console.warn("Couldn't find generated declaration file");
+-        if (fs.existsSync(join(tmpRoot, "dist"))) {
+-          const tempFiles = fs.readdirSync(join(tmpRoot, "dist"), {
+-            recursive: true
+-          }).filter((x) => x.toString().endsWith(".d.ts")).map((x) => `- ${x}`).join("\n");
+-          if (tempFiles) {
+-            console.warn(
+-              "You can override with `overrideOutputPath` with one of the following:"
+-            );
+-            console.warn(tempFiles);
++      const [bundle] = (0, import_dts_bundle_generator.generateDtsBundle)(
++        [
++          {
++            filePath: targetFilePath,
++            output: { noBanner: true }
+           }
+-        } else {
+-          console.warn(
+-            "reason: root folder doesn't exists",
+-            join(tmpRoot, "dist")
+-          );
++        ],
++        {
++          preferredConfigPath: tsconfigPath
+         }
+-        return;
+-      }
++      );
++      return declarationToJSONSchema(bundle);
+     }
+     const declaration = fs.readFileSync(targetFile, "utf8");
+     if (!debug && fs.existsSync(tmpRoot))
+diff --git a/dist/cjs/index.js b/dist/cjs/index.js
+index f21a77aaecb17eeddab89d07c840ddd3872fe170..f6bade0dea284430b4475ca1596bb263fe86244e 100644
+--- a/dist/cjs/index.js
++++ b/dist/cjs/index.js
+@@ -9937,6 +9937,7 @@ function TypeBox(...args) {
+ }
+ 
+ // src/gen/index.ts
++var import_dts_bundle_generator = require("dts-bundle-generator");
+ var matchRoute = /: Elysia<(.*)>/gs;
+ var numberKey = /(\d+):/g;
+ var join = (...parts) => parts.join("/").replace(/\/{1,}/g, "/");
+@@ -10081,52 +10082,18 @@ var fromTypes = (targetFilePath = "src/index.ts", {
+         throw new Error(
+           "[@elysiajs/openapi/gen] `fromTypes` declaration generation require child_process.spawnSync which is not available in this environment"
+         );
+-      spawnSync(`tsc`, {
+-        shell: true,
+-        cwd: tmpRoot,
+-        stdio: silent ? void 0 : "inherit"
+-      });
+-      const fileName = targetFilePath.replace(/.tsx$/, ".ts").replace(/.ts$/, ".d.ts");
+-      targetFile = (overrideOutputPath ? typeof overrideOutputPath === "string" ? overrideOutputPath.startsWith("/") ? overrideOutputPath : join(tmpRoot, "dist", overrideOutputPath) : overrideOutputPath(tmpRoot) : void 0) ?? join(
+-        tmpRoot,
+-        "dist",
+-        // remove leading like src or something similar
+-        fileName.slice(fileName.indexOf("/") + 1)
+-      );
+-      let existed = fs.existsSync(targetFile);
+-      if (!existed && !overrideOutputPath) {
+-        targetFile = join(
+-          tmpRoot,
+-          "dist",
+-          // use original file name as-is eg. in monorepo
+-          fileName
+-        );
+-        existed = fs.existsSync(targetFile);
+-      }
+-      if (!existed) {
+-        fs.rmSync(join(tmpRoot, "tsconfig.json"));
+-        console.warn(
+-          "[@elysiajs/openapi/gen] Failed to generate OpenAPI schema"
+-        );
+-        console.warn("Couldn't find generated declaration file");
+-        if (fs.existsSync(join(tmpRoot, "dist"))) {
+-          const tempFiles = fs.readdirSync(join(tmpRoot, "dist"), {
+-            recursive: true
+-          }).filter((x) => x.toString().endsWith(".d.ts")).map((x) => `- ${x}`).join("\n");
+-          if (tempFiles) {
+-            console.warn(
+-              "You can override with `overrideOutputPath` with one of the following:"
+-            );
+-            console.warn(tempFiles);
++      const [bundle] = (0, import_dts_bundle_generator.generateDtsBundle)(
++        [
++          {
++            filePath: targetFilePath,
++            output: { noBanner: true }
+           }
+-        } else {
+-          console.warn(
+-            "reason: root folder doesn't exists",
+-            join(tmpRoot, "dist")
+-          );
++        ],
++        {
++          preferredConfigPath: tsconfigPath
+         }
+-        return;
+-      }
++      );
++      return declarationToJSONSchema(bundle);
+     }
+     const declaration = fs.readFileSync(targetFile, "utf8");
+     if (!debug && fs.existsSync(tmpRoot))
+diff --git a/dist/gen/index.mjs b/dist/gen/index.mjs
+index 6871cf3f254e8c50a80dfa02e0e6bfffe0c825c6..6d5f07b42bce6060aaa489ced609526169f79c6e 100644
+--- a/dist/gen/index.mjs
++++ b/dist/gen/index.mjs
+@@ -8965,6 +8965,7 @@ function TypeBox(...args) {
+ }
+ 
+ // src/gen/index.ts
++import { generateDtsBundle } from "dts-bundle-generator";
+ var matchRoute = /: Elysia<(.*)>/gs;
+ var numberKey = /(\d+):/g;
+ var join = (...parts) => parts.join("/").replace(/\/{1,}/g, "/");
+@@ -9109,52 +9110,18 @@ var fromTypes = (targetFilePath = "src/index.ts", {
+         throw new Error(
+           "[@elysiajs/openapi/gen] `fromTypes` declaration generation require child_process.spawnSync which is not available in this environment"
+         );
+-      spawnSync(`tsc`, {
+-        shell: true,
+-        cwd: tmpRoot,
+-        stdio: silent ? void 0 : "inherit"
+-      });
+-      const fileName = targetFilePath.replace(/.tsx$/, ".ts").replace(/.ts$/, ".d.ts");
+-      targetFile = (overrideOutputPath ? typeof overrideOutputPath === "string" ? overrideOutputPath.startsWith("/") ? overrideOutputPath : join(tmpRoot, "dist", overrideOutputPath) : overrideOutputPath(tmpRoot) : void 0) ?? join(
+-        tmpRoot,
+-        "dist",
+-        // remove leading like src or something similar
+-        fileName.slice(fileName.indexOf("/") + 1)
+-      );
+-      let existed = fs.existsSync(targetFile);
+-      if (!existed && !overrideOutputPath) {
+-        targetFile = join(
+-          tmpRoot,
+-          "dist",
+-          // use original file name as-is eg. in monorepo
+-          fileName
+-        );
+-        existed = fs.existsSync(targetFile);
+-      }
+-      if (!existed) {
+-        fs.rmSync(join(tmpRoot, "tsconfig.json"));
+-        console.warn(
+-          "[@elysiajs/openapi/gen] Failed to generate OpenAPI schema"
+-        );
+-        console.warn("Couldn't find generated declaration file");
+-        if (fs.existsSync(join(tmpRoot, "dist"))) {
+-          const tempFiles = fs.readdirSync(join(tmpRoot, "dist"), {
+-            recursive: true
+-          }).filter((x) => x.toString().endsWith(".d.ts")).map((x) => `- ${x}`).join("\n");
+-          if (tempFiles) {
+-            console.warn(
+-              "You can override with `overrideOutputPath` with one of the following:"
+-            );
+-            console.warn(tempFiles);
++      const [bundle] = generateDtsBundle(
++        [
++          {
++            filePath: targetFilePath,
++            output: { noBanner: true }
+           }
+-        } else {
+-          console.warn(
+-            "reason: root folder doesn't exists",
+-            join(tmpRoot, "dist")
+-          );
++        ],
++        {
++          preferredConfigPath: tsconfigPath
+         }
+-        return;
+-      }
++      );
++      return declarationToJSONSchema(bundle);
+     }
+     const declaration = fs.readFileSync(targetFile, "utf8");
+     if (!debug && fs.existsSync(tmpRoot))
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 761da13fcf7cede93745ba9dd1067e23ca43dd4e..e186f828daa13dcb47b0b93a54ac635a3873c392 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -9915,6 +9915,7 @@ function TypeBox(...args) {
+ }
+ 
+ // src/gen/index.ts
++import { generateDtsBundle } from "dts-bundle-generator";
+ var matchRoute = /: Elysia<(.*)>/gs;
+ var numberKey = /(\d+):/g;
+ var join = (...parts) => parts.join("/").replace(/\/{1,}/g, "/");
+@@ -10059,52 +10060,18 @@ var fromTypes = (targetFilePath = "src/index.ts", {
+         throw new Error(
+           "[@elysiajs/openapi/gen] `fromTypes` declaration generation require child_process.spawnSync which is not available in this environment"
+         );
+-      spawnSync(`tsc`, {
+-        shell: true,
+-        cwd: tmpRoot,
+-        stdio: silent ? void 0 : "inherit"
+-      });
+-      const fileName = targetFilePath.replace(/.tsx$/, ".ts").replace(/.ts$/, ".d.ts");
+-      targetFile = (overrideOutputPath ? typeof overrideOutputPath === "string" ? overrideOutputPath.startsWith("/") ? overrideOutputPath : join(tmpRoot, "dist", overrideOutputPath) : overrideOutputPath(tmpRoot) : void 0) ?? join(
+-        tmpRoot,
+-        "dist",
+-        // remove leading like src or something similar
+-        fileName.slice(fileName.indexOf("/") + 1)
+-      );
+-      let existed = fs.existsSync(targetFile);
+-      if (!existed && !overrideOutputPath) {
+-        targetFile = join(
+-          tmpRoot,
+-          "dist",
+-          // use original file name as-is eg. in monorepo
+-          fileName
+-        );
+-        existed = fs.existsSync(targetFile);
+-      }
+-      if (!existed) {
+-        fs.rmSync(join(tmpRoot, "tsconfig.json"));
+-        console.warn(
+-          "[@elysiajs/openapi/gen] Failed to generate OpenAPI schema"
+-        );
+-        console.warn("Couldn't find generated declaration file");
+-        if (fs.existsSync(join(tmpRoot, "dist"))) {
+-          const tempFiles = fs.readdirSync(join(tmpRoot, "dist"), {
+-            recursive: true
+-          }).filter((x) => x.toString().endsWith(".d.ts")).map((x) => `- ${x}`).join("\n");
+-          if (tempFiles) {
+-            console.warn(
+-              "You can override with `overrideOutputPath` with one of the following:"
+-            );
+-            console.warn(tempFiles);
++      const [bundle] = generateDtsBundle(
++        [
++          {
++            filePath: targetFilePath,
++            output: { noBanner: true }
+           }
+-        } else {
+-          console.warn(
+-            "reason: root folder doesn't exists",
+-            join(tmpRoot, "dist")
+-          );
++        ],
++        {
++          preferredConfigPath: tsconfigPath
+         }
+-        return;
+-      }
++      );
++      return declarationToJSONSchema(bundle);
+     }
+     const declaration = fs.readFileSync(targetFile, "utf8");
+     if (!debug && fs.existsSync(tmpRoot))
+w

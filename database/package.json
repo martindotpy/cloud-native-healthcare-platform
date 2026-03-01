@@ -1,0 +1,18 @@
+{
+  "name": "@healthcare/database",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "db:generate": "tsc && bunx --bun drizzle-kit generate"
+  },
+  "dependencies": {
+    "drizzle-kit": "0.31.9",
+    "drizzle-orm": "0.45.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

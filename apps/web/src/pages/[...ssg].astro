@@ -1,0 +1,36 @@
+---
+import Layout from "@healthcare/web/core/components/layouts/Layout.astro"
+import { isDev } from "@healthcare/web/core/configuration/app-configuration"
+import { AppEntry } from "@healthcare/web/pages/_app/entry"
+import { handleSsrRequest } from "@healthcare/web/pages/_app/handle-ssr-request"
+import type { GetStaticPaths } from "astro"
+import type { ComponentProps } from "astro/types"
+
+// Context
+type Props = ComponentProps<typeof Layout>
+
+export const prerender = !isDev // Live render in dev
+
+export const getStaticPaths = (() => {
+  const routes = ["login", "register"]
+
+  return routes.map((ssg) => ({
+    params: { ssg },
+  }))
+}) satisfies GetStaticPaths
+
+// Handle redirect response
+const { redirectResponse, getServerRouter, scriptHtml } =
+  await handleSsrRequest(Astro)
+
+if (redirectResponse) return redirectResponse
+
+// Page props
+const { props } = Astro
+---
+
+<Layout {...props}>
+  <AppEntry client:load getServerRouter={getServerRouter} />
+
+  <Fragment set:html={scriptHtml} />
+</Layout>

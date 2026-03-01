@@ -1,0 +1,103 @@
+services:
+  # Apps
+  # - Web
+  app-web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: healthcare-web
+    ports:
+      - "4321:80"
+    depends_on:
+      - service-auth
+
+  # Services
+  # - Auth
+  service-auth:
+    build:
+      context: .
+      dockerfile: services/auth/Dockerfile
+    container_name: healthcare-auth
+    env_file: services/auth/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database-sql
+      - database-redis
+
+  # - Appointment
+  service-appointment:
+    build:
+      context: .
+      dockerfile: services/appointment/Dockerfile
+    container_name: healthcare-appointment
+    env_file: services/appointment/.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database-sql
+      - database-redis
+
+  # Databases
+  # - SQL
+  database-sql:
+    image: postgres:17-alpine
+    container_name: healthcare-db
+    environment:
+      TZ: America/Lima
+      POSTGRES_USER: healthcare-user
+      POSTGRES_PASSWORD: healthcare-password
+      POSTGRES_DB: healthcare-db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # - SQL Studio
+  database-sql-studio:
+    image: ghcr.io/drizzle-team/gateway:latest
+    container_name: healthcare-db-studio
+    environment:
+      TZ: America/Lima
+      DATABASE_URL_APP: postgres://healthcare-user:healthcare-password@database-sql:5432/healthcare-db
+      STORE_PATH: /data
+    volumes:
+      - healthcheck-sql-studio-data:/data
+    ports:
+      - "4983:4983"
+
+  # - Redis
+  database-redis:
+    image: redis:7-alpine
+    container_name: healthcare-redis
+    environment:
+      TZ: America/Lima
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "redis-cli ping"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # - Redis Studio
+  database-redis-studio:
+    image: redis/redisinsight:latest
+    container_name: healthcare-redis-studio
+    environment:
+      TZ: America/Lima
+      RI_REDIS_HOST_APP: database-redis
+    ports:
+      - "5540:5540"
+
+volumes:
+  healthcheck-sql-studio-data:

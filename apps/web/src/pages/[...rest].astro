@@ -1,0 +1,11 @@
+---
+import Layout from "@healthcare/web/core/components/layouts/Layout.astro"
+import { AppEntry } from "@healthcare/web/pages/_app/entry"
+
+// Context
+export const prerender = false
+---
+
+<Layout>
+  <AppEntry client:only="react" clientOnly={true} />
+</Layout>

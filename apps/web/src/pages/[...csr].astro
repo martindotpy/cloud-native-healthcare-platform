@@ -1,0 +1,19 @@
+---
+import Layout from "@healthcare/web/core/components/layouts/Layout.astro"
+import { AppEntry } from "@healthcare/web/pages/_app/entry"
+import type { GetStaticPaths } from "astro"
+import type { ComponentProps } from "astro/types"
+
+// Context
+type Props = ComponentProps<typeof Layout>
+
+export const getStaticPaths = (() => {
+  return [{ params: { csr: "_shell" } }]
+}) satisfies GetStaticPaths
+
+const { props } = Astro
+---
+
+<Layout {...props}>
+  <AppEntry client:only="react" clientOnly={true} />
+</Layout>

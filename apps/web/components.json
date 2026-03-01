@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-vega",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles.css",
+    "baseColor": "gray",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "tabler",
+  "aliases": {
+    "components": "@healthcare/web/core/components",
+    "utils": "@healthcare/web/core/lib/tailwind",
+    "ui": "@healthcare/web/core/components/ui",
+    "lib": "@healthcare/web/core/lib",
+    "hooks": "@healthcare/web/core/hooks"
+  },
+  "registries": {
+    "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json",
+    "@diceui": "https://diceui.com/r/{name}.json",
+    "@animate-ui": "https://animate-ui.com/r/{name}.json",
+    "@react-bits": "https://reactbits.dev/r/{name}.json"
+  }
+}

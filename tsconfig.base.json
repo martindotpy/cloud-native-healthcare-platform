@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    // Environment setup & latest features
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+
+    // Bundler mode
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "allowJs": true,
+
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+
+    // Alias
+    "baseUrl": ".",
+    "paths": {
+      // Assets
+      "@healthcare/assets/*": ["./assets/*"],
+
+      // Shared
+      "@healthcare/shared/*": ["./shared/typescript/src/*"],
+
+      // Database
+      "@healthcare/database": ["./database/src"],
+      "@healthcare/database/*": ["./database/src/*"],
+
+      // Auth
+      "@healthcare/auth": ["./services/auth/src"],
+      "@healthcare/auth/*": ["./services/auth/src/*"],
+
+      // Web
+      "@healthcare/web/*": ["./apps/web/src/*"],
+      "@healthcare/web/styles": ["./apps/web/src/styles.css"],
+      "@healthcare/web/tailwind-config": ["./apps/web/tailwind.config.js"]
+    }
+  }
+}
