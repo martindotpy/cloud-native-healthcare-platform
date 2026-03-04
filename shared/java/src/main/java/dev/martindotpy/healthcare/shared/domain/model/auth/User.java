@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import dev.martindotpy.healthcare.shared.domain.model.auth.enums.UserRole;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
-import io.smallrye.common.constraint.NotNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "\"user\"")

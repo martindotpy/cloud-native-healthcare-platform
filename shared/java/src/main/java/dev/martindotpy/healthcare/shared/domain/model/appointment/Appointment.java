@@ -6,13 +6,13 @@ import java.util.UUID;
 import dev.martindotpy.healthcare.shared.domain.model.appointment.enums.AppointmentStatus;
 import dev.martindotpy.healthcare.shared.domain.model.ehr.Patient;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
-import io.smallrye.common.constraint.NotNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Appointment extends PanacheEntityBase {
