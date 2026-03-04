@@ -23,6 +23,7 @@
         <quarkus.platform.version>3.32.1</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
+        <jvm.args>--enable-native-access=ALL-UNNAMED</jvm.args>
     </properties>
 
     <dependencyManagement>

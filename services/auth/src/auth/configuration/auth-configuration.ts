@@ -35,7 +35,13 @@ export const auth = betterAuth({
   },
   plugins: [
     admin(),
-    jwt(),
+    jwt({
+      jwks: {
+        keyPairConfig: {
+          alg: "ES256",
+        },
+      },
+    }),
     validator([
       {
         path: "/sign-in/email",
@@ -73,6 +79,7 @@ export const auth = betterAuth({
 })
 
 // Types
+export type Auth = typeof auth.$Infer.Session
 export type AuthUser = typeof auth.$Infer.Session.user
 export type AuthSession = typeof auth.$Infer.Session.session
 export type AuthErrorCode = keyof typeof auth.$ERROR_CODES
