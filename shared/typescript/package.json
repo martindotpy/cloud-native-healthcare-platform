@@ -2,8 +2,13 @@
   "name": "@healthcare/shared",
   "type": "module",
   "private": true,
+  "scripts": {
+    "api:generate": "openapi-ts"
+  },
   "dependencies": {
     "@bogeychan/elysia-logger": "0.1.10",
+    "@hey-api/openapi-ts": "0.93.1",
+    "@tanstack/react-query": "5.90.21",
     "consola": "3.4.2",
     "pino": "10.3.1"
   },

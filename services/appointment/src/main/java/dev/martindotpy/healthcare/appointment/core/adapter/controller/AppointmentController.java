@@ -2,10 +2,11 @@ package dev.martindotpy.healthcare.appointment.core.adapter.controller;
 
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import jakarta.ws.rs.Path;
+import dev.martindotpy.healthcare.shared.domain.model.appointment.Appointment;
+import io.quarkus.hibernate.reactive.rest.data.panache.PanacheEntityResource;
+import io.quarkus.rest.data.panache.ResourceProperties;
 
 @Tag(name = "Appointment")
-@Path("/api/appointment")
-public class AppointmentController {
-
+@ResourceProperties(path = "api/appointment", authenticated = true)
+public interface AppointmentController extends PanacheEntityResource<Appointment, Long> {
 }
