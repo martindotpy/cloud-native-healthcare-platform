@@ -3,6 +3,18 @@
   "configurations": [
     {
       "type": "node-terminal",
+      "name": "Healthcare (openapi) 🐞",
+      "request": "launch",
+      "preLaunchTask": "wait:15",
+      "command": "bun run api:generate",
+      "cwd": "${workspaceFolder}/shared/typescript",
+      "internalConsoleOptions": "neverOpen",
+      "presentation": {
+        "hidden": true
+      }
+    },
+    {
+      "type": "node-terminal",
       "name": "Healthcare (web) 🐞",
       "request": "launch",
       "command": "bun run dev",
@@ -32,7 +44,7 @@
     },
     {
       "type": "java",
-      "name": "Healthcare (appointment 🐞)",
+      "name": "Healthcare (appointment) 🐞",
       "request": "attach",
       "preLaunchTask": "appointment:dev",
       "hostName": "localhost",
@@ -47,8 +59,9 @@
       "name": "Healthcare 🐞",
       "configurations": [
         "Healthcare (web) 🐞",
+        "Healthcare (openapi) 🐞",
         "Healthcare (auth) 🐞",
-        "Healthcare (appointment 🐞)"
+        "Healthcare (appointment) 🐞"
       ],
       "preLaunchTask": "docker:dev",
       "stopAll": true

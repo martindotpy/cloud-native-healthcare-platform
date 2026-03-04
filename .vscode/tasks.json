@@ -35,6 +35,14 @@
       "type": "shell",
       "label": "docker:dev",
       "command": "docker compose -f docker-compose.dev.yml up --remove-orphans -d"
+    },
+    {
+      "type": "shell",
+      "label": "wait:15",
+      "command": "sleep 15",
+      "windows": {
+        "command": "timeout /t 15"
+      }
     }
   ]
 }
