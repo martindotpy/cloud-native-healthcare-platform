@@ -9,6 +9,7 @@
     "@bogeychan/elysia-logger": "0.1.10",
     "@hey-api/openapi-ts": "0.93.1",
     "@tanstack/react-query": "5.90.21",
+    "axios": "1.13.6",
     "consola": "3.4.2",
     "pino": "10.3.1"
   },
