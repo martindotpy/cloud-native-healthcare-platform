@@ -25,20 +25,23 @@ export function HomeSidebar({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader
-        className={cn(
-          "overflow-hidden py-8 transition-[padding]",
-          "group-data-[collapsible=icon]:px-3 group-data-[collapsible=icon]:py-4"
-        )}
-      >
-        <Banner
+      <SidebarHeader className="p-0">
+        <Link
+          to="/"
           className={cn(
-            "text-primary-500 mx-auto mt-4 h-8 min-h-8 w-fit min-w-35",
-            "md:mt-0",
-            "group-data-[collapsible=icon]:hidden"
+            "py-8 transition-[padding]",
+            "group-data-[collapsible=icon]:px-3 group-data-[collapsible=icon]:py-4!"
           )}
-        />
-        <Brandmark className="hidden aspect-video w-6 group-data-[collapsible=icon]:block" />
+        >
+          <Banner
+            className={cn(
+              "text-primary-500 mx-auto mt-4 h-8 min-h-8 w-fit min-w-35",
+              "md:mt-0",
+              "group-data-[collapsible=icon]:hidden"
+            )}
+          />
+          <Brandmark className="hidden aspect-video w-6 group-data-[collapsible=icon]:block" />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
