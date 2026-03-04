@@ -54,7 +54,7 @@ services:
     container_name: healthcare-redis-studio
     environment:
       TZ: America/Lima
-      RI_REDIS_HOST_APP: local:database-redis:6379
+      RI_REDIS_HOST_APP: database-redis
     ports:
       - "5540:5540"
 
