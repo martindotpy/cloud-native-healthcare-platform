@@ -77,9 +77,11 @@ client.getConfig().axios?.interceptors.response.use(
       $jwt.set(newAccessToken)
 
       processQueue(null, newAccessToken)
+
       return client.instance.request(originalRequest)
     } catch (err) {
       processQueue(err, null)
+
       return Promise.reject(err)
     } finally {
       isRefreshing = false
