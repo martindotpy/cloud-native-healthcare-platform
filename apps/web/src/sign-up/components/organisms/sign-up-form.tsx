@@ -93,12 +93,14 @@ export function SignUpForm() {
         control={control}
         name="password"
         label="Contraseña"
+        inputProps={{ autoComplete: "new-password" }}
       />
 
       <ControlledPasswordInput
         control={control}
         name="confirmPassword"
         label="Confirmar contraseña"
+        inputProps={{ autoComplete: "new-password" }}
       />
 
       <ControlledCheckbox
