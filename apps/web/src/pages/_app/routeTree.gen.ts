@@ -14,6 +14,7 @@ import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
 import { Route as PublicSignUpRouteImport } from "./routes/_public/sign-up"
 import { Route as PublicLoginRouteImport } from "./routes/_public/login"
+import { Route as PrivateCitasRouteImport } from "./routes/_private/citas"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: "/_public",
@@ -38,14 +39,21 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: "/login",
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PrivateCitasRoute = PrivateCitasRouteImport.update({
+  id: "/citas",
+  path: "/citas",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
+  "/citas": typeof PrivateCitasRoute
   "/login": typeof PublicLoginRoute
   "/sign-up": typeof PublicSignUpRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
+  "/citas": typeof PrivateCitasRoute
   "/login": typeof PublicLoginRoute
   "/sign-up": typeof PublicSignUpRoute
 }
@@ -53,19 +61,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
+  "/_private/citas": typeof PrivateCitasRoute
   "/_public/login": typeof PublicLoginRoute
   "/_public/sign-up": typeof PublicSignUpRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/login" | "/sign-up"
+  fullPaths: "/" | "/citas" | "/login" | "/sign-up"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/login" | "/sign-up"
+  to: "/" | "/citas" | "/login" | "/sign-up"
   id:
     | "__root__"
     | "/_private"
     | "/_public"
+    | "/_private/citas"
     | "/_public/login"
     | "/_public/sign-up"
     | "/_private/"
@@ -113,14 +123,23 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    "/_private/citas": {
+      id: "/_private/citas"
+      path: "/citas"
+      fullPath: "/citas"
+      preLoaderRoute: typeof PrivateCitasRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
   }
 }
 
 interface PrivateRouteRouteChildren {
+  PrivateCitasRoute: typeof PrivateCitasRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
+  PrivateCitasRoute: PrivateCitasRoute,
   PrivateIndexRoute: PrivateIndexRoute,
 }
 

@@ -5,5 +5,5 @@ export const Route = createFileRoute("/_private/")({
 })
 
 function HomeComponent() {
-  return <div></div>
+  return <div>Home</div>
 }
