@@ -50,3 +50,4 @@ services/**/index.js.map
 # Misc
 .DS_Store
 *.exe
+*.log
