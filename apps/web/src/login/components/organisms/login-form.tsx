@@ -1,4 +1,4 @@
-import { LoginRequest } from "@healthcare/shared/login/request/login-request"
+import { LoginRequest } from "@healthcare/shared/auth/login/request/login-request"
 import {
   authClient,
   isAuthError,
@@ -9,7 +9,7 @@ import { ControlledPasswordInput } from "@healthcare/web/core/components/form/co
 import { Button } from "@healthcare/web/core/components/ui/button"
 import { Link } from "@healthcare/web/core/components/ui/link"
 import { Separator } from "@healthcare/web/core/components/ui/separator"
-import { Route } from "@healthcare/web/pages/_app/routes/_public/route"
+import { Route as PublicRoute } from "@healthcare/web/pages/_app/routes/_public/route"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
@@ -19,7 +19,7 @@ import { toast } from "sonner"
 // Component
 export function LoginForm() {
   // Query params
-  const { redirect } = Route.useSearch()
+  const { redirect } = PublicRoute.useSearch()
 
   // Navigate
   const navigate = useNavigate()
@@ -116,7 +116,6 @@ export function LoginForm() {
         to="/sign-up"
         variant="secondary"
         className="mt-2 w-full"
-        style={{ viewTransitionName: "sign-up" }}
       >
         Regístrate
       </Link>

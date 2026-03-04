@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_public")({
 function PublicLayoutComponent() {
   return (
     <>
-      <main className="flex flex-1 flex-col items-center justify-center px-5 py-16">
+      <main className="flex flex-1 flex-col items-center justify-center px-5 pt-8 pb-6">
         <Outlet />
       </main>
 

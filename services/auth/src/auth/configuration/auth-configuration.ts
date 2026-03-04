@@ -1,7 +1,8 @@
 import { isDev } from "@healthcare/auth/core/configuration/app-configuration"
 import { db, schema } from "@healthcare/database"
+import { LoginRequest } from "@healthcare/shared/auth/login/request/login-request"
+import { SignUpRequest } from "@healthcare/shared/auth/sign-up/request/sign-up-request"
 import { serverLog } from "@healthcare/shared/log/server-logger"
-import { LoginRequest } from "@healthcare/shared/login/request/login-request"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin, jwt, openAPI } from "better-auth/plugins"
@@ -39,6 +40,10 @@ export const auth = betterAuth({
       {
         path: "/sign-in/email",
         schema: LoginRequest,
+      },
+      {
+        path: "/sign-up/email",
+        schema: SignUpRequest,
       },
     ]),
     openAPI(),

@@ -16,6 +16,16 @@ function SignUpComponent() {
         style={{ viewTransitionName: "cayetano-heredia-banner" }}
       />
 
+      <div className="mt-6 max-w-sm space-y-2">
+        <h1 className="text-center text-3xl font-bold">
+          ¡Únete a nuestra clínica!
+        </h1>
+
+        <p className="text-muted-foreground text-center text-sm">
+          Crea tu cuenta para acceder a tus citas, historial médico y más.
+        </p>
+      </div>
+
       <SignUpForm />
     </>
   )
