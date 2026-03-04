@@ -1,4 +1,4 @@
 // Component
-export function RegisterForm() {
+export function SignUpForm() {
   return <form></form>
 }

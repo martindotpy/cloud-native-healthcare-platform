@@ -2,6 +2,7 @@ import { PublicFooter } from "@healthcare/web/core/components/molecules/public-f
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 import z from "zod"
 
+// Layout
 export const Route = createFileRoute("/_public")({
   validateSearch: z.object({
     redirect: z.string().optional(),

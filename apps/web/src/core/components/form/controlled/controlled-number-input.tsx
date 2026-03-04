@@ -1,12 +1,12 @@
 import {
-  labelBaseClassName,
-  svgInputBaseClassName,
-} from "@healthcare/web/core/components/form/styles/input-styles"
-import {
   Field,
   FieldError,
   FieldLabel,
 } from "@healthcare/web/core/components/ui/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+} from "@healthcare/web/core/components/ui/input-group"
 import {
   NumberInput,
   type NumberInputProps,
@@ -58,50 +58,41 @@ export function ControlledNumberInput<
       name={name}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel
-            htmlFor={name}
-            className={cn(labelBaseClassName, labelClassName)}
-            {...labelProps}
-          >
+          <FieldLabel htmlFor={name} className={labelClassName} {...labelProps}>
             {label}
-
-            <div className="relative">
-              <NumberInput
-                id={name}
-                className={numberInputClassName}
-                aria-invalid={fieldState.invalid}
-                min={schema?.minValue ?? undefined}
-                max={schema?.maxValue ?? undefined}
-                {...inputProps}
-                {...field}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                onChange={undefined}
-                value={field.value}
-                defaultValue={field.value}
-                onValueChange={(value) => field.onChange(value)}
-              />
-
-              {Icon && (
-                <Icon
-                  {...iconProps}
-                  className={cn(
-                    svgInputBaseClassName,
-                    "peer",
-                    iconProps.className
-                  )}
-                />
-              )}
-            </div>
-
-            {fieldState.invalid && (
-              <FieldError
-                className={cn(errorClassName)}
-                {...errorProps}
-                errors={[fieldState.error]}
-              />
-            )}
           </FieldLabel>
+
+          <InputGroup>
+            <NumberInput
+              id={name}
+              className={numberInputClassName}
+              aria-invalid={fieldState.invalid}
+              min={schema?.minValue ?? undefined}
+              max={schema?.maxValue ?? undefined}
+              {...inputProps}
+              {...field}
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              onChange={undefined}
+              value={field.value}
+              defaultValue={field.value}
+              onValueChange={(value) => field.onChange(value)}
+            />
+
+            {Icon && (
+              <InputGroupAddon align="inline-end">
+                <Icon {...iconProps} className={cn(iconProps.className)} />
+              </InputGroupAddon>
+            )}
+          </InputGroup>
+
+          {fieldState.invalid && (
+            <FieldError
+              className={cn(errorClassName)}
+              {...errorProps}
+              errors={[fieldState.error]}
+            />
+          )}
         </Field>
       )}
       {...props}

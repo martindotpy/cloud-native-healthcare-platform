@@ -3,7 +3,9 @@ import {
   authClient,
   isAuthError,
 } from "@healthcare/web/auth/client/auth-client"
+import { ControlledCheckbox } from "@healthcare/web/core/components/form/controlled/controlled-checkbox"
 import { ControlledInput } from "@healthcare/web/core/components/form/controlled/controlled-input"
+import { ControlledPasswordInput } from "@healthcare/web/core/components/form/controlled/controlled-password-input"
 import { Button } from "@healthcare/web/core/components/ui/button"
 import { Link } from "@healthcare/web/core/components/ui/link"
 import { Separator } from "@healthcare/web/core/components/ui/separator"
@@ -11,6 +13,7 @@ import { Route } from "@healthcare/web/pages/_app/routes/_public/route"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
+import { TbMail } from "react-icons/tb"
 import { toast } from "sonner"
 
 // Component
@@ -27,19 +30,19 @@ export function LoginForm() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: true,
     },
   })
 
-  const onSubmit = handleSubmit((data) => {
-    authClient.signIn.email(
-      {
-        email: data.email,
-        password: data.password,
-      },
-      {
-        onSuccess: () => {
+  const onSubmit = handleSubmit(async (data) => {
+    await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+      rememberMe: data.rememberMe,
+      fetchOptions: {
+        onSuccess: ({ data }) => {
           navigate({ to: redirect || "/" })
-          toast.success("¡Inicio de sesión exitoso! Bienvenido de nuevo.")
+          toast.success(`¡Bienvenido, ${data.user.name}!`)
         },
         onError: ({ error }) => {
           if (!isAuthError(error)) {
@@ -61,8 +64,8 @@ export function LoginForm() {
               break
           }
         },
-      }
-    )
+      },
+    })
   })
 
   return (
@@ -71,15 +74,20 @@ export function LoginForm() {
         control={control}
         name="email"
         label="Correo electrónico"
+        icon={TbMail}
+        inputProps={{ autoComplete: "email", autoFocus: true }}
       />
 
-      <ControlledInput
+      <ControlledPasswordInput
         control={control}
         name="password"
         label="Contraseña"
-        inputProps={{
-          type: "password",
-        }}
+      />
+
+      <ControlledCheckbox
+        control={control}
+        name="rememberMe"
+        label="Recuérdame"
       />
 
       <Button
@@ -105,10 +113,10 @@ export function LoginForm() {
       </div>
 
       <Link
-        to="/register"
+        to="/sign-up"
         variant="secondary"
         className="mt-2 w-full"
-        style={{ viewTransitionName: "register-button" }}
+        style={{ viewTransitionName: "sign-up" }}
       >
         Regístrate
       </Link>

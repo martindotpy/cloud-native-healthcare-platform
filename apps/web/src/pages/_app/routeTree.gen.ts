@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from "./routes/__root"
 import { Route as PublicRouteRouteImport } from "./routes/_public/route"
 import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
-import { Route as PublicRegisterRouteImport } from "./routes/_public/register"
+import { Route as PublicSignUpRouteImport } from "./routes/_public/sign-up"
 import { Route as PublicLoginRouteImport } from "./routes/_public/login"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -28,9 +28,9 @@ const PrivateIndexRoute = PrivateIndexRouteImport.update({
   path: "/",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const PublicRegisterRoute = PublicRegisterRouteImport.update({
-  id: "/register",
-  path: "/register",
+const PublicSignUpRoute = PublicSignUpRouteImport.update({
+  id: "/sign-up",
+  path: "/sign-up",
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
@@ -42,32 +42,32 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
   "/login": typeof PublicLoginRoute
-  "/register": typeof PublicRegisterRoute
+  "/sign-up": typeof PublicSignUpRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
   "/login": typeof PublicLoginRoute
-  "/register": typeof PublicRegisterRoute
+  "/sign-up": typeof PublicSignUpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
   "/_public/login": typeof PublicLoginRoute
-  "/_public/register": typeof PublicRegisterRoute
+  "/_public/sign-up": typeof PublicSignUpRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/login" | "/register"
+  fullPaths: "/" | "/login" | "/sign-up"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/login" | "/register"
+  to: "/" | "/login" | "/sign-up"
   id:
     | "__root__"
     | "/_private"
     | "/_public"
     | "/_public/login"
-    | "/_public/register"
+    | "/_public/sign-up"
     | "/_private/"
   fileRoutesById: FileRoutesById
 }
@@ -99,11 +99,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivateIndexRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    "/_public/register": {
-      id: "/_public/register"
-      path: "/register"
-      fullPath: "/register"
-      preLoaderRoute: typeof PublicRegisterRouteImport
+    "/_public/sign-up": {
+      id: "/_public/sign-up"
+      path: "/sign-up"
+      fullPath: "/sign-up"
+      preLoaderRoute: typeof PublicSignUpRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     "/_public/login": {
@@ -130,12 +130,12 @@ const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
 
 interface PublicRouteRouteChildren {
   PublicLoginRoute: typeof PublicLoginRoute
-  PublicRegisterRoute: typeof PublicRegisterRoute
+  PublicSignUpRoute: typeof PublicSignUpRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicLoginRoute: PublicLoginRoute,
-  PublicRegisterRoute: PublicRegisterRoute,
+  PublicSignUpRoute: PublicSignUpRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(

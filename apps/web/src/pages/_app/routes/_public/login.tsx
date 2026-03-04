@@ -2,6 +2,7 @@ import banner from "@healthcare/web/assets/img/cayetano-heredia-banner.png"
 import { LoginForm } from "@healthcare/web/login/components/organisms/login-form"
 import { createFileRoute } from "@tanstack/react-router"
 
+// Route
 export const Route = createFileRoute("/_public/login")({
   component: LoginComponent,
 })

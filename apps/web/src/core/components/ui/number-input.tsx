@@ -1,11 +1,12 @@
-import { Button } from "@healthcare/web/core/components/ui/button"
-import { Input } from "@healthcare/web/core/components/ui/input"
-import { cn } from "@healthcare/web/core/lib/tailwind"
 import {
   NumberField,
   type NumberFieldGroupProps,
   type NumberFieldRootProps,
 } from "@base-ui/react/number-field"
+import { Button } from "@healthcare/web/core/components/ui/button"
+import { Input } from "@healthcare/web/core/components/ui/input"
+import { InputGroupInput } from "@healthcare/web/core/components/ui/input-group"
+import { cn } from "@healthcare/web/core/lib/tailwind"
 import { TbMinus, TbPlus } from "react-icons/tb"
 
 export interface NumberInputProps extends NumberFieldRootProps {
@@ -39,7 +40,7 @@ export function NumberInput({
         />
         <NumberField.Input
           {...inputProps}
-          render={(props) => <Input {...props} />}
+          render={(props) => <InputGroupInput {...props} />}
         />
         <NumberField.Increment
           {...incrementProps}

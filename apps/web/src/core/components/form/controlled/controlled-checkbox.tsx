@@ -1,7 +1,7 @@
-import { labelBaseClassName } from "@healthcare/web/core/components/form/styles/input-styles"
 import { Checkbox } from "@healthcare/web/core/components/ui/checkbox"
 import {
   Field,
+  FieldContent,
   FieldError,
   FieldLabel,
 } from "@healthcare/web/core/components/ui/field"
@@ -42,26 +42,28 @@ export function ControlledCheckbox<
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
-          <FieldLabel
-            htmlFor={name}
-            className={cn(labelBaseClassName, labelClassName)}
-            {...labelProps}
-          >
-            {label}
+        <Field data-invalid={fieldState.invalid} orientation="horizontal">
+          <Checkbox
+            id={name}
+            className={inputClassName}
+            {...field}
+            checked={field.value}
+            defaultChecked={field.value}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            onChange={undefined}
+            onCheckedChange={field.onChange}
+            {...inputProps}
+          />
 
-            <Checkbox
-              id={name}
-              className={cn(inputClassName)}
-              {...field}
-              checked={field.value}
-              defaultChecked={field.value}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              onChange={undefined}
-              onCheckedChange={field.onChange}
-              {...inputProps}
-            />
+          <FieldContent>
+            <FieldLabel
+              htmlFor={name}
+              className={labelClassName}
+              {...labelProps}
+            >
+              {label}
+            </FieldLabel>
 
             {fieldState.invalid && (
               <FieldError
@@ -70,7 +72,7 @@ export function ControlledCheckbox<
                 errors={[fieldState.error]}
               />
             )}
-          </FieldLabel>
+          </FieldContent>
         </Field>
       )}
       {...props}

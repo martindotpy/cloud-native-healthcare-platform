@@ -1,16 +1,14 @@
 import {
-  inputWithIconBaseClassName,
-  labelBaseClassName,
-  svgInputBaseClassName,
-} from "@healthcare/web/core/components/form/styles/input-styles"
-import {
   Field,
   FieldError,
   FieldLabel,
 } from "@healthcare/web/core/components/ui/field"
-import { Input } from "@healthcare/web/core/components/ui/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@healthcare/web/core/components/ui/input-group"
 import type { ClassNameProp } from "@healthcare/web/core/kit/component-kit"
-import { cn } from "@healthcare/web/core/lib/tailwind"
 import {
   Controller,
   type FieldPath,
@@ -26,7 +24,7 @@ interface ControlledInputProps<
   TTransformedValues = TFieldValues,
 > extends UseControllerProps<TFieldValues, TName, TTransformedValues> {
   label?: React.ReactNode
-  inputProps?: React.ComponentProps<typeof Input>
+  inputProps?: React.ComponentProps<typeof InputGroupInput>
   labelProps?: React.ComponentProps<typeof FieldLabel>
   errorProps?: React.ComponentProps<typeof FieldError>
   icon?: React.FunctionComponent<TIconProps>
@@ -54,46 +52,34 @@ export function ControlledInput<
       name={name}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel
-            htmlFor={name}
-            className={cn(labelBaseClassName, labelClassName)}
-            {...labelProps}
-          >
+          <FieldLabel htmlFor={name} className={labelClassName} {...labelProps}>
             {label}
-
-            <div className="relative">
-              <Input
-                id={name}
-                type="text"
-                className={cn(
-                  { [inputWithIconBaseClassName]: Boolean(Icon) },
-                  inputClassName
-                )}
-                aria-invalid={fieldState.invalid}
-                {...field}
-                {...inputProps}
-              />
-
-              {Icon && (
-                <Icon
-                  {...iconProps}
-                  className={cn(
-                    svgInputBaseClassName,
-                    "peer",
-                    iconProps.className
-                  )}
-                />
-              )}
-            </div>
-
-            {fieldState.invalid && (
-              <FieldError
-                className={cn(errorClassName)}
-                {...errorProps}
-                errors={[fieldState.error]}
-              />
-            )}
           </FieldLabel>
+
+          <InputGroup>
+            <InputGroupInput
+              id={name}
+              type="text"
+              className={inputClassName}
+              aria-invalid={fieldState.invalid}
+              {...field}
+              {...inputProps}
+            />
+
+            {Icon && (
+              <InputGroupAddon align="inline-end">
+                <Icon {...iconProps} className={iconProps.className} />
+              </InputGroupAddon>
+            )}
+          </InputGroup>
+
+          {fieldState.invalid && (
+            <FieldError
+              className={errorClassName}
+              {...errorProps}
+              errors={[fieldState.error]}
+            />
+          )}
         </Field>
       )}
       {...props}
