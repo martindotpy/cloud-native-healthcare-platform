@@ -33,6 +33,62 @@
     },
     {
       "type": "shell",
+      "group": "build",
+      "label": "ehr:dev",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "\\[(\\d+)\\]\\s(.*):(\\d+):(\\d+)\\s\\-\\s{(.*)}:\\s(.*)$",
+              "file": 2,
+              "line": 3,
+              "column": 4,
+              "message": 6
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Scanning for projects...",
+            "endsPattern": "(^.*Quarkus .* started in .*\\.)|(^.* ERROR .* Failed to start)"
+          }
+        }
+      ],
+      "command": "./mvnw -f services/ehr/pom.xml quarkus:dev",
+      "windows": {
+        "command": ".\\mvnw.cmd -f services/ehr/pom.xml quarkus:dev"
+      }
+    },
+    {
+      "type": "shell",
+      "group": "build",
+      "label": "insurance:dev",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "\\[(\\d+)\\]\\s(.*):(\\d+):(\\d+)\\s\\-\\s{(.*)}:\\s(.*)$",
+              "file": 2,
+              "line": 3,
+              "column": 4,
+              "message": 6
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Scanning for projects...",
+            "endsPattern": "(^.*Quarkus .* started in .*\\.)|(^.* ERROR .* Failed to start)"
+          }
+        }
+      ],
+      "command": "./mvnw -f services/insurance/pom.xml quarkus:dev",
+      "windows": {
+        "command": ".\\mvnw.cmd -f services/insurance/pom.xml quarkus:dev"
+      }
+    },
+    {
+      "type": "shell",
       "label": "docker:dev",
       "command": "docker compose -f docker-compose.dev.yml up --remove-orphans -d"
     },

@@ -52,6 +52,28 @@
       "presentation": {
         "hidden": true
       }
+    },
+    {
+      "type": "java",
+      "name": "Healthcare (ehr) 🐞",
+      "request": "attach",
+      "preLaunchTask": "ehr:dev",
+      "hostName": "localhost",
+      "port": 5006,
+      "presentation": {
+        "hidden": true
+      }
+    },
+    {
+      "type": "java",
+      "name": "Healthcare (insurance) 🐞",
+      "request": "attach",
+      "preLaunchTask": "insurance:dev",
+      "hostName": "localhost",
+      "port": 5007,
+      "presentation": {
+        "hidden": true
+      }
     }
   ],
   "compounds": [
@@ -61,7 +83,9 @@
         "Healthcare (web) 🐞",
         "Healthcare (openapi) 🐞",
         "Healthcare (auth) 🐞",
-        "Healthcare (appointment) 🐞"
+        "Healthcare (appointment) 🐞",
+        "Healthcare (ehr) 🐞",
+        "Healthcare (insurance) 🐞"
       ],
       "preLaunchTask": "docker:dev",
       "stopAll": true
