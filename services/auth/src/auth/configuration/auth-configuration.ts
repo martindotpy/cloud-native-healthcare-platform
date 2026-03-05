@@ -1,13 +1,10 @@
 import { isDev } from "@healthcare/auth/core/configuration/app-configuration"
 import { db, schema } from "@healthcare/database"
-import { LoginRequest } from "@healthcare/shared/auth/login/request/login-request"
-import { SignUpRequest } from "@healthcare/shared/auth/sign-up/request/sign-up-request"
 import { serverLog } from "@healthcare/shared/log/server-logger"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin, jwt, openAPI } from "better-auth/plugins"
 import { redis } from "bun"
-import { validator } from "validation-better-auth"
 
 // Logger
 const authLogger = serverLog.child({ module: "auth" })
@@ -42,16 +39,6 @@ export const auth = betterAuth({
         },
       },
     }),
-    validator([
-      {
-        path: "/sign-in/email",
-        schema: LoginRequest,
-      },
-      {
-        path: "/sign-up/email",
-        schema: SignUpRequest,
-      },
-    ]),
     openAPI(),
   ],
   telemetry: {

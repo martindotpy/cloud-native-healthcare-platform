@@ -94,10 +94,10 @@
     },
     {
       "type": "shell",
-      "label": "wait:15",
-      "command": "sleep 15",
+      "label": "wait:30",
+      "command": "sleep 30",
       "windows": {
-        "command": "timeout /t 15"
+        "command": "timeout /t 30"
       }
     }
   ]

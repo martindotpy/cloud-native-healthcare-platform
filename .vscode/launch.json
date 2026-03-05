@@ -5,7 +5,7 @@
       "type": "node-terminal",
       "name": "Healthcare (openapi) 🐞",
       "request": "launch",
-      "preLaunchTask": "wait:15",
+      "preLaunchTask": "wait:30",
       "command": "bun run api:generate",
       "cwd": "${workspaceFolder}/shared/typescript",
       "internalConsoleOptions": "neverOpen",
