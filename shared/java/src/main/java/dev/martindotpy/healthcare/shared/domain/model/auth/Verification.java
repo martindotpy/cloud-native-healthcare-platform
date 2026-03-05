@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Verification extends PanacheEntityBase {
     @Id
+    @NotNull
     public UUID id;
 
     @NotBlank

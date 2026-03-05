@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class InsuranceProvider extends PanacheEntityBase {
     @Id
+    @NotNull
     public UUID id;
 
     @NotNull

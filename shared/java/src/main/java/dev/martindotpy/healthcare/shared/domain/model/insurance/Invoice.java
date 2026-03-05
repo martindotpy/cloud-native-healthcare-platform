@@ -24,6 +24,7 @@ import jakarta.validation.constraints.NotNull;
 })
 public class Invoice extends PanacheEntityBase {
     @Id
+    @NotNull
     public UUID id;
 
     @NotNull
