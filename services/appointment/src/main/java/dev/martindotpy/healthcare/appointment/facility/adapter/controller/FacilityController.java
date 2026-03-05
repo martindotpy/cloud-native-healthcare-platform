@@ -1,4 +1,4 @@
-package dev.martindotpy.healthcare.appointment.facility.core.adapter.controller;
+package dev.martindotpy.healthcare.appointment.facility.adapter.controller;
 
 import java.util.UUID;
 
