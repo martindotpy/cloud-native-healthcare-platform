@@ -53,6 +53,7 @@ import {
   getApiSpecialtyCount,
   type Options,
   postApiAppointment,
+  postApiAppointmentValidate,
   postApiClinicalEpisode,
   postApiDoctor,
   postApiFacility,
@@ -156,6 +157,8 @@ import type {
   GetApiSpecialtyResponse,
   PostApiAppointmentData,
   PostApiAppointmentResponse,
+  PostApiAppointmentValidateData,
+  PostApiAppointmentValidateResponse,
   PostApiClinicalEpisodeData,
   PostApiClinicalEpisodeResponse,
   PostApiDoctorData,
@@ -390,6 +393,33 @@ export const getApiAppointmentCountOptions = (
     },
     queryKey: getApiAppointmentCountQueryKey(options),
   })
+
+/**
+ * Validate appointment scheduling rules
+ */
+export const postApiAppointmentValidateMutation = (
+  options?: Partial<Options<PostApiAppointmentValidateData>>
+): UseMutationOptions<
+  PostApiAppointmentValidateResponse,
+  AxiosError<DefaultError>,
+  Options<PostApiAppointmentValidateData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiAppointmentValidateResponse,
+    AxiosError<DefaultError>,
+    Options<PostApiAppointmentValidateData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiAppointmentValidate({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
 
 export const deleteApiAppointmentByIdMutation = (
   options?: Partial<Options<DeleteApiAppointmentByIdData>>

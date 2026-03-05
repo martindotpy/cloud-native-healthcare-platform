@@ -27,7 +27,7 @@
         "prettier-plugin-astro-organize-imports": "0.4.11",
         "prettier-plugin-organize-imports": "4.3.0",
         "prettier-plugin-tailwindcss": "0.7.2",
-        "shadcn": "3.8.5",
+        "shadcn": "^3.8.5",
         "typescript-eslint": "8.56.1",
       },
       "peerDependencies": {
@@ -80,7 +80,6 @@
         "react-icons": "5.5.0",
         "react-number-format": "5.4.4",
         "satori": "0.24.1",
-        "shadcn": "3.8.5",
         "sonner": "2.0.7",
         "tailwind-merge": "3.5.0",
         "tailwindcss": "4.1.18",

@@ -3,7 +3,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "db:generate": "tsc && bunx --bun drizzle-kit generate"
+    "db:generate": "tsc && bunx --bun drizzle-kit generate",
+    "db:seed": "bun run ./src/seeds/index.ts"
   },
   "dependencies": {
     "drizzle-kit": "0.31.9",

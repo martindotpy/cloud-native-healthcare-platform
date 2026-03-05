@@ -12,7 +12,7 @@ import {
   MenubarTrigger,
 } from "@healthcare/web/core/components/ui/menubar"
 import { SidebarTrigger } from "@healthcare/web/core/components/ui/sidebar"
-import { Route } from "@healthcare/web/pages/_app/routes/_private"
+import { Route as PrivateRoute } from "@healthcare/web/pages/_app/routes/_private/route"
 import { useNavigate } from "@tanstack/react-router"
 import { TbChevronDown, TbLogout } from "react-icons/tb"
 import { toast } from "sonner"
@@ -23,7 +23,7 @@ export function HomeHeader() {
   const navigate = useNavigate()
 
   // Auth data
-  const { auth } = Route.useRouteContext()
+  const { auth } = PrivateRoute.useRouteContext()
 
   // Handler for logout
   const handleLogout = () => {

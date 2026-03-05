@@ -10,6 +10,8 @@ const migrationsFolder = path.join(cwd, "..", "..", "database", "migration")
  * Initializes the application.
  */
 export async function initializeApp() {
-  await initializeDatabase(migrationsFolder)
+  await initializeDatabase(migrationsFolder, {
+    runSeed: process.env.DATABASE_SEED_ENABLED !== "false",
+  })
   await initializeAuth()
 }

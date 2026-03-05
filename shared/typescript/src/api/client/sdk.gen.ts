@@ -126,6 +126,9 @@ import type {
   PostApiAppointmentData,
   PostApiAppointmentErrors,
   PostApiAppointmentResponses,
+  PostApiAppointmentValidateData,
+  PostApiAppointmentValidateErrors,
+  PostApiAppointmentValidateResponses,
   PostApiClinicalEpisodeData,
   PostApiClinicalEpisodeErrors,
   PostApiClinicalEpisodeResponses,
@@ -243,6 +246,28 @@ export const getApiAppointmentCount = <ThrowOnError extends boolean = false>(
     responseType: "json",
     url: "/api/appointment/count",
     ...options,
+  })
+
+/**
+ * Validate appointment scheduling rules
+ */
+export const postApiAppointmentValidate = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiAppointmentValidateData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiAppointmentValidateResponses,
+    PostApiAppointmentValidateErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/appointment/validate",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
   })
 
 export const deleteApiAppointmentById = <ThrowOnError extends boolean = false>(

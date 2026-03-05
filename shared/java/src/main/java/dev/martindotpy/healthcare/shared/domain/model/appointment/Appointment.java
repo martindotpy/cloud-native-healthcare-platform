@@ -9,7 +9,6 @@ import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
@@ -21,13 +20,13 @@ public class Appointment extends PanacheEntityBase {
     public UUID id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     public Patient patient;
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     public Doctor doctor;
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     public Facility facility;
     @NotNull
     public LocalDateTime scheduledDate;

@@ -1,6 +1,6 @@
 import type { LinkRoute } from "@healthcare/web/pages/_app/routes/-routes-types"
 import type { IconType } from "react-icons/lib"
-import { TbLayout } from "react-icons/tb"
+import { TbCalendar, TbLayout } from "react-icons/tb"
 
 // Hook
 interface SidebarItem {
@@ -15,6 +15,11 @@ export function useSidebarItems(): SidebarItem[] {
       to: "/",
       label: "Inicio",
       icon: TbLayout,
+    },
+    {
+      to: "/citas",
+      label: "Citas",
+      icon: TbCalendar,
     },
   ]
 }

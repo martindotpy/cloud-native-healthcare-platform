@@ -13,7 +13,22 @@ export type OpenapiAppointment = {
   status?: OpenapiAppointmentStatus
 }
 
-export type OpenapiAppointmentStatus = "PENDING" | "COMPLETED" | "CANCELED"
+export type OpenapiAppointmentStatus = "pending" | "completed" | "canceled"
+
+export type OpenapiAppointmentValidationRequest = {
+  doctorId?: OpenapiUuid
+  facilityId?: OpenapiUuid
+  scheduledDate?: OpenapiLocalDateTime
+  appointmentId?: OpenapiUuid
+}
+
+export type OpenapiAppointmentValidationResponse = {
+  valid?: boolean
+  dateInPast?: boolean
+  doctorAssignedToFacility?: boolean
+  hasConflict?: boolean
+  message?: string
+}
 
 export type OpenapiDoctor = {
   id: OpenapiUuid
@@ -251,6 +266,38 @@ export type GetApiAppointmentCountResponses = {
 
 export type GetApiAppointmentCountResponse =
   GetApiAppointmentCountResponses[keyof GetApiAppointmentCountResponses]
+
+export type PostApiAppointmentValidateData = {
+  body: OpenapiAppointmentValidationRequest
+  path?: never
+  query?: never
+  url: "/api/appointment/validate"
+}
+
+export type PostApiAppointmentValidateErrors = {
+  /**
+   * Bad Request
+   */
+  400: unknown
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type PostApiAppointmentValidateResponses = {
+  /**
+   * Validation result
+   */
+  200: OpenapiAppointmentValidationResponse
+}
+
+export type PostApiAppointmentValidateResponse =
+  PostApiAppointmentValidateResponses[keyof PostApiAppointmentValidateResponses]
 
 export type DeleteApiAppointmentByIdData = {
   body?: never
