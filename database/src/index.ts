@@ -1,4 +1,8 @@
+import * as appointmentSchema from "@healthcare/database/appointment/schema/resources-schema"
 import * as authSchema from "@healthcare/database/auth/schema/auth-schema"
+import * as ehrSchema from "@healthcare/database/ehr/schema/health-record-schema"
+import * as patientSchema from "@healthcare/database/ehr/schema/patient-schema"
+import * as insuranceSchema from "@healthcare/database/insurance/schema/insurance-schema"
 import { serverLog } from "@healthcare/shared/log/server-logger"
 import { SQL } from "bun"
 import { drizzle } from "drizzle-orm/bun-sql"
@@ -7,10 +11,16 @@ import { drizzle } from "drizzle-orm/bun-sql"
 const client = new SQL()
 
 // All schemas
-const allSchemas = { ...authSchema }
+const allSchemas = {
+  ...authSchema,
+  ...appointmentSchema,
+  ...ehrSchema,
+  ...patientSchema,
+  ...insuranceSchema,
+}
 
 // Schema
-type Schemas = typeof authSchema
+type Schemas = typeof allSchemas
 type StripTableSuffix<S extends string> = S extends `${infer R}Table` ? R : S
 
 type DatabaseSchema = {

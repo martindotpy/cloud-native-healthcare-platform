@@ -4,7 +4,7 @@
     "shadcn": {
       "type": "local",
       "command": [
-        "npx",
+        "bunx",
         "shadcn@latest",
         "mcp"
       ],

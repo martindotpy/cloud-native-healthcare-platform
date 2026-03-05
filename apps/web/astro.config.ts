@@ -120,6 +120,9 @@ export default defineConfig({
       proxy: {
         "/api/auth": "http://localhost:3000",
         "/api/appointment": "http://localhost:8080",
+        "/api/specialty": "http://localhost:8080",
+        "/api/facility": "http://localhost:8080",
+        "/api/doctor": "http://localhost:8080",
         "/api/ehr": "http://localhost:8081",
         "/api/clinical-episode": "http://localhost:8081",
         "/api/health-record": "http://localhost:8081",

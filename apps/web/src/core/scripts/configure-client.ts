@@ -10,6 +10,7 @@ client.setConfig({
 
     return jwt ?? undefined
   },
+  
 })
 
 // Token refresh logic

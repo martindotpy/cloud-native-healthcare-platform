@@ -2,13 +2,13 @@
 import Styles from "@healthcare/web/core/components/atoms/Styles.astro"
 import Sonner from "@healthcare/web/core/components/molecules/Sonner.astro"
 import {
-  site,
-  siteUrl,
+site,
+siteUrl,
 } from "@healthcare/web/core/configuration/app-configuration"
 import {
-  appName,
-  author,
-  defaultDescription,
+appName,
+author,
+defaultDescription,
 } from "@healthcare/web/core/constant/seo-constant"
 import { getOpengraphImagePath } from "@healthcare/web/core/kit/opengraph-kit"
 import { getTitle } from "@healthcare/web/core/kit/title-kit"
@@ -149,6 +149,7 @@ let ogImageUrl = getOpengraphImagePath({ url, site: siteUrl })
       )
     }
     <script src="@healthcare/web/core/scripts/umami-identify.ts"></script>
+    <script src="@healthcare/web/core/scripts/configure-client.ts"></script>
   </head>
 
   <body class="flex min-h-dvh flex-col">
