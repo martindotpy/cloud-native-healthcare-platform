@@ -22,10 +22,10 @@ public class ClinicalEpisode extends PanacheEntityBase {
     public UUID id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     public HealthRecord healthRecord;
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     public Appointment appointment;
     @NotBlank
     @Column(columnDefinition = "text")

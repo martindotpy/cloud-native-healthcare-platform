@@ -21,7 +21,7 @@ public class Prescription extends PanacheEntityBase {
     public UUID id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     public ClinicalEpisode clinicalEpisode;
 
     @NotBlank
