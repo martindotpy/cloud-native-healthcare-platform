@@ -1,5 +1,4 @@
 import {
-  getApiAppointmentOptions,
   getApiInsuranceInvoiceCountOptions,
   getApiInsuranceInvoiceCountQueryKey,
   getApiInsuranceInvoiceOptions,
@@ -9,9 +8,14 @@ import {
   getApiInsuranceProviderCountQueryKey,
   getApiInsuranceProviderOptions,
   getApiInsuranceProviderQueryKey,
-  postApiInsuranceInvoiceMutation,
   postApiInsuranceProviderMutation,
 } from "@healthcare/shared/api/client/@tanstack/react-query.gen"
+import { client } from "@healthcare/shared/api/client/client.gen"
+import type {
+  OpenapiAppointment,
+  OpenapiInsuranceProvider,
+  OpenapiInvoice,
+} from "@healthcare/shared/api/client/types.gen"
 import { Button } from "@healthcare/web/core/components/ui/button"
 import {
   Field,
@@ -27,6 +31,42 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
+
+type CreateInvoiceByIdsRequest = {
+  id: string
+  appointmentId: string
+  insuranceProviderId?: string
+  totalAmount: number
+  paymentMethod: string
+}
+
+const getApiErrorMessage = (error: unknown, fallback: string) => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "response" in error &&
+    typeof error.response === "object" &&
+    error.response !== null &&
+    "data" in error.response
+  ) {
+    const data = (error.response as { data?: unknown }).data
+
+    if (typeof data === "string" && data.trim().length > 0) {
+      return data
+    }
+
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "detail" in data &&
+      typeof data.detail === "string"
+    ) {
+      return data.detail
+    }
+  }
+
+  return fallback
+}
 
 export const Route = createFileRoute("/_private/aseguradoras")({
   component: InsurancePage,
@@ -65,12 +105,18 @@ function InsurancePage() {
       security: [{ type: "http", scheme: "bearer" }],
     })
   )
-  const appointmentsQuery = useQuery(
-    getApiAppointmentOptions({
-      query: { page: 0, size: 400, sort: ["-scheduledDate"] },
-      security: [{ type: "http", scheme: "bearer" }],
-    })
-  )
+  const appointmentsQuery = useQuery({
+    queryKey: ["insurance-page-available-appointments"],
+    queryFn: async () => {
+      const response = await client.get<{ 200: OpenapiAppointment[] }, never, true>({
+        url: "/api/insurance/invoice/available-appointments",
+        throwOnError: true,
+        security: [{ type: "http", scheme: "bearer" }],
+      })
+
+      return response.data
+    },
+  })
 
   const summaryQuery = useQuery({
     ...getApiInsuranceInvoiceSummaryByInvoiceIdOptions({
@@ -104,9 +150,21 @@ function InsurancePage() {
   })
 
   const createInvoiceMutation = useMutation({
-    ...postApiInsuranceInvoiceMutation({
-      security: [{ type: "http", scheme: "bearer" }],
-    }),
+    mutationFn: async (request: CreateInvoiceByIdsRequest) => {
+      const response = await client.post<
+        { 201: OpenapiInvoice },
+        { 400: unknown; 404: unknown; 409: unknown },
+        true
+      >({
+        url: "/api/insurance/invoice/create-by-ids",
+        body: request,
+        responseType: "json",
+        throwOnError: true,
+        security: [{ type: "http", scheme: "bearer" }],
+      })
+
+      return response.data
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: getApiInsuranceInvoiceQueryKey(),
@@ -120,8 +178,8 @@ function InsurancePage() {
       setPaymentMethod("")
       toast.success("Factura registrada")
     },
-    onError: () => {
-      toast.error("No se pudo registrar la factura")
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error, "No se pudo registrar la factura"))
     },
   })
 
@@ -150,33 +208,28 @@ function InsurancePage() {
       return
     }
 
-    const provider = (providersQuery.data ?? []).find(
-      (item) => item.id === selectedProviderId
-    )
-
     await createInvoiceMutation.mutateAsync({
-      body: {
-        id: crypto.randomUUID(),
-        appointment,
-        insuranceProvider: provider,
-        totalAmount: Number(totalAmount),
-        paymentMethod: paymentMethod.trim(),
-      },
+      id: crypto.randomUUID(),
+      appointmentId: appointment.id,
+      insuranceProviderId: selectedProviderId || undefined,
+      totalAmount: Number(totalAmount),
+      paymentMethod: paymentMethod.trim(),
     })
   }
 
   const appointmentOptions = useMemo<SearchableSelectOption[]>(() => {
-    return (appointmentsQuery.data ?? []).map((appointment) => ({
-      value: appointment.id,
-      label: `DNI ${appointment.patient.nationalId} - Dr. ${appointment.doctor.lastName}`,
-      keywords: `${appointment.patient.nationalId} ${appointment.doctor.firstName} ${appointment.doctor.lastName} ${appointment.facility.name}`,
-    }))
+    return (appointmentsQuery.data ?? [])
+      .map((appointment) => ({
+        value: appointment.id,
+        label: `DNI ${appointment.patient.nationalId} - Dr. ${appointment.doctor.lastName}`,
+        keywords: `${appointment.patient.nationalId} ${appointment.doctor.firstName} ${appointment.doctor.lastName} ${appointment.facility.name}`,
+      }))
   }, [appointmentsQuery.data])
 
   const providerOptions = useMemo<SearchableSelectOption[]>(() => {
     return [
       { value: "", label: "Sin aseguradora" },
-      ...((providersQuery.data ?? []).map((provider) => ({
+      ...((providersQuery.data ?? []).map((provider: OpenapiInsuranceProvider) => ({
         value: provider.id,
         label: provider.name,
         keywords: provider.coverageDetails,
@@ -198,7 +251,7 @@ function InsurancePage() {
         <MetricCard label="Facturas" value={invoiceCountQuery.data ?? 0} />
         <MetricCard
           label="Citas Disponibles"
-          value={(appointmentsQuery.data ?? []).length}
+          value={appointmentOptions.length}
         />
         <MetricCard
           label="Resumen Consultado"
@@ -307,6 +360,9 @@ function InsurancePage() {
           />
           {summaryInvoiceId && summaryQuery.data && (
             <div className="bg-muted/50 mt-3 rounded-lg border p-3 text-sm">
+              <p className="mb-2 inline-flex rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                Integracion activa: SOAP
+              </p>
               <p className="font-semibold">{summaryQuery.data.message}</p>
               <p className="text-muted-foreground">
                 Total: {summaryQuery.data.totalAmount ?? 0}

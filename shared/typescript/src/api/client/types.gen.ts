@@ -13,6 +13,18 @@ export type OpenapiAppointment = {
   status?: OpenapiAppointmentStatus
 }
 
+export type OpenapiAppointmentInsuranceSummaryResponse = {
+  found?: boolean
+  message?: string
+  invoiceId?: OpenapiUuid
+  appointmentId?: OpenapiUuid
+  insuranceProviderId?: OpenapiUuid
+  insuranceProviderName?: string
+  totalAmount?: number
+  paymentMethod?: string
+  issuedAt?: OpenapiLocalDateTime
+}
+
 export type OpenapiAppointmentStatus = "pending" | "completed" | "canceled"
 
 export type OpenapiAppointmentValidationRequest = {
@@ -192,6 +204,14 @@ export type OpenapiPrescription = {
   issuedAt?: OpenapiLocalDateTime
 }
 
+export type OpenapiCreateInvoiceByIdsRequest = {
+  id?: OpenapiUuid
+  appointmentId: OpenapiUuid
+  insuranceProviderId?: OpenapiUuid
+  totalAmount: number
+  paymentMethod: string
+}
+
 export type OpenapiInsuranceProvider = {
   id: OpenapiUuid
   name: string
@@ -308,6 +328,39 @@ export type GetApiAppointmentCountResponses = {
 
 export type GetApiAppointmentCountResponse =
   GetApiAppointmentCountResponses[keyof GetApiAppointmentCountResponses]
+
+export type GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdData =
+  {
+    body?: never
+    path: {
+      appointmentId: OpenapiUuid
+    }
+    query?: never
+    url: "/api/appointment/insurance-summary/by-appointment/{appointmentId}"
+  }
+
+export type GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdErrors =
+  {
+    /**
+     * Not Authorized
+     */
+    401: unknown
+    /**
+     * Not Allowed
+     */
+    403: unknown
+  }
+
+export type GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponses =
+  {
+    /**
+     * Insurance summary through SOAP
+     */
+    200: OpenapiAppointmentInsuranceSummaryResponse
+  }
+
+export type GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponse =
+  GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponses[keyof GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponses]
 
 export type PostApiAppointmentValidateData = {
   body: OpenapiAppointmentValidationRequest
@@ -1876,6 +1929,34 @@ export type PostApiInsuranceInvoiceResponses = {
 export type PostApiInsuranceInvoiceResponse =
   PostApiInsuranceInvoiceResponses[keyof PostApiInsuranceInvoiceResponses]
 
+export type GetApiInsuranceInvoiceAvailableAppointmentsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: "/api/insurance/invoice/available-appointments"
+}
+
+export type GetApiInsuranceInvoiceAvailableAppointmentsErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type GetApiInsuranceInvoiceAvailableAppointmentsResponses = {
+  /**
+   * Appointments without invoices
+   */
+  200: OpenapiAppointment
+}
+
+export type GetApiInsuranceInvoiceAvailableAppointmentsResponse =
+  GetApiInsuranceInvoiceAvailableAppointmentsResponses[keyof GetApiInsuranceInvoiceAvailableAppointmentsResponses]
+
 export type GetApiInsuranceInvoiceCountData = {
   body?: never
   path?: never
@@ -1903,6 +1984,49 @@ export type GetApiInsuranceInvoiceCountResponses = {
 
 export type GetApiInsuranceInvoiceCountResponse =
   GetApiInsuranceInvoiceCountResponses[keyof GetApiInsuranceInvoiceCountResponses]
+
+export type PostApiInsuranceInvoiceCreateByIdsData = {
+  body: OpenapiCreateInvoiceByIdsRequest
+  path?: never
+  query?: never
+  url: "/api/insurance/invoice/create-by-ids"
+}
+
+export type PostApiInsuranceInvoiceCreateByIdsErrors = {
+  /**
+   * Bad Request
+   */
+  400: unknown
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Appointment or insurance provider was not found
+   */
+  404: OpenapiHttpProblem
+  /**
+   * The appointment already has a registered invoice
+   */
+  409: OpenapiHttpProblem
+}
+
+export type PostApiInsuranceInvoiceCreateByIdsError =
+  PostApiInsuranceInvoiceCreateByIdsErrors[keyof PostApiInsuranceInvoiceCreateByIdsErrors]
+
+export type PostApiInsuranceInvoiceCreateByIdsResponses = {
+  /**
+   * Invoice created
+   */
+  201: OpenapiInvoice
+}
+
+export type PostApiInsuranceInvoiceCreateByIdsResponse =
+  PostApiInsuranceInvoiceCreateByIdsResponses[keyof PostApiInsuranceInvoiceCreateByIdsResponses]
 
 export type GetApiInsuranceInvoiceSummaryByInvoiceIdData = {
   body?: never

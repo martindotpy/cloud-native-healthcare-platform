@@ -24,6 +24,7 @@ import {
   getApiAppointment,
   getApiAppointmentById,
   getApiAppointmentCount,
+  getApiAppointmentInsuranceSummaryByAppointmentByAppointmentId,
   getApiClinicalEpisode,
   getApiClinicalEpisodeById,
   getApiClinicalEpisodeCount,
@@ -37,6 +38,7 @@ import {
   getApiHealthRecordById,
   getApiHealthRecordCount,
   getApiInsuranceInvoice,
+  getApiInsuranceInvoiceAvailableAppointments,
   getApiInsuranceInvoiceById,
   getApiInsuranceInvoiceCount,
   getApiInsuranceInvoiceSummaryByInvoiceId,
@@ -63,6 +65,7 @@ import {
   postApiFacility,
   postApiHealthRecord,
   postApiInsuranceInvoice,
+  postApiInsuranceInvoiceCreateByIds,
   postApiInsuranceProvider,
   postApiPatient,
   postApiPrescription,
@@ -105,6 +108,8 @@ import type {
   GetApiAppointmentCountData,
   GetApiAppointmentCountResponse,
   GetApiAppointmentData,
+  GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdData,
+  GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponse,
   GetApiAppointmentResponse,
   GetApiClinicalEpisodeByIdData,
   GetApiClinicalEpisodeByIdResponse,
@@ -130,6 +135,8 @@ import type {
   GetApiHealthRecordCountResponse,
   GetApiHealthRecordData,
   GetApiHealthRecordResponse,
+  GetApiInsuranceInvoiceAvailableAppointmentsData,
+  GetApiInsuranceInvoiceAvailableAppointmentsResponse,
   GetApiInsuranceInvoiceByIdData,
   GetApiInsuranceInvoiceByIdResponse,
   GetApiInsuranceInvoiceCountData,
@@ -180,6 +187,9 @@ import type {
   PostApiFacilityResponse,
   PostApiHealthRecordData,
   PostApiHealthRecordResponse,
+  PostApiInsuranceInvoiceCreateByIdsData,
+  PostApiInsuranceInvoiceCreateByIdsError,
+  PostApiInsuranceInvoiceCreateByIdsResponse,
   PostApiInsuranceInvoiceData,
   PostApiInsuranceInvoiceResponse,
   PostApiInsuranceProviderData,
@@ -408,6 +418,46 @@ export const getApiAppointmentCountOptions = (
     },
     queryKey: getApiAppointmentCountQueryKey(options),
   })
+
+export const getApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdQueryKey =
+  (
+    options: Options<GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdData>
+  ) =>
+    createQueryKey(
+      "getApiAppointmentInsuranceSummaryByAppointmentByAppointmentId",
+      options
+    )
+
+/**
+ * Get insurance summary for an appointment through SOAP client
+ */
+export const getApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdOptions =
+  (
+    options: Options<GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdData>
+  ) =>
+    queryOptions<
+      GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponse,
+      AxiosError<DefaultError>,
+      GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponse,
+      ReturnType<
+        typeof getApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdQueryKey
+      >
+    >({
+      queryFn: async ({ queryKey, signal }) => {
+        const { data } =
+          await getApiAppointmentInsuranceSummaryByAppointmentByAppointmentId({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true,
+          })
+        return data
+      },
+      queryKey:
+        getApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdQueryKey(
+          options
+        ),
+    })
 
 /**
  * Validate appointment scheduling rules
@@ -2062,6 +2112,34 @@ export const postApiInsuranceInvoiceMutation = (
   return mutationOptions
 }
 
+export const getApiInsuranceInvoiceAvailableAppointmentsQueryKey = (
+  options?: Options<GetApiInsuranceInvoiceAvailableAppointmentsData>
+) => createQueryKey("getApiInsuranceInvoiceAvailableAppointments", options)
+
+/**
+ * List appointments available for invoice creation
+ */
+export const getApiInsuranceInvoiceAvailableAppointmentsOptions = (
+  options?: Options<GetApiInsuranceInvoiceAvailableAppointmentsData>
+) =>
+  queryOptions<
+    GetApiInsuranceInvoiceAvailableAppointmentsResponse,
+    AxiosError<DefaultError>,
+    GetApiInsuranceInvoiceAvailableAppointmentsResponse,
+    ReturnType<typeof getApiInsuranceInvoiceAvailableAppointmentsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInsuranceInvoiceAvailableAppointments({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInsuranceInvoiceAvailableAppointmentsQueryKey(options),
+  })
+
 export const getApiInsuranceInvoiceCountQueryKey = (
   options?: Options<GetApiInsuranceInvoiceCountData>
 ) => createQueryKey("getApiInsuranceInvoiceCount", options)
@@ -2086,6 +2164,33 @@ export const getApiInsuranceInvoiceCountOptions = (
     },
     queryKey: getApiInsuranceInvoiceCountQueryKey(options),
   })
+
+/**
+ * Create invoice using entity IDs
+ */
+export const postApiInsuranceInvoiceCreateByIdsMutation = (
+  options?: Partial<Options<PostApiInsuranceInvoiceCreateByIdsData>>
+): UseMutationOptions<
+  PostApiInsuranceInvoiceCreateByIdsResponse,
+  AxiosError<PostApiInsuranceInvoiceCreateByIdsError>,
+  Options<PostApiInsuranceInvoiceCreateByIdsData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInsuranceInvoiceCreateByIdsResponse,
+    AxiosError<PostApiInsuranceInvoiceCreateByIdsError>,
+    Options<PostApiInsuranceInvoiceCreateByIdsData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInsuranceInvoiceCreateByIds({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
 
 export const getApiInsuranceInvoiceSummaryByInvoiceIdQueryKey = (
   options: Options<GetApiInsuranceInvoiceSummaryByInvoiceIdData>

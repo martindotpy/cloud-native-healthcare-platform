@@ -31,7 +31,7 @@ export async function initializeAuth() {
         password: adminPassword,
         role: "admin",
         data: {
-          lastName: "Dev",
+          lastName: "Ramos",
         },
       },
     })

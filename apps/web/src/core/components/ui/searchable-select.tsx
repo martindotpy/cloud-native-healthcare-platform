@@ -19,7 +19,19 @@ interface SearchableSelectProps {
   emptyMessage?: string
   className?: string
   disabled?: boolean
+  autoSelectOnEnter?: boolean
 }
+
+const normalizeSearchText = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+
+const normalizeSearchTextCompact = (value: string) =>
+  normalizeSearchText(value).replace(/[^a-z0-9]/g, "")
 
 function SearchableSelect({
   id,
@@ -31,6 +43,7 @@ function SearchableSelect({
   emptyMessage = "No hay resultados",
   className,
   disabled,
+  autoSelectOnEnter = false,
 }: SearchableSelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
@@ -39,16 +52,23 @@ function SearchableSelect({
   const selectedOption = options.find((option) => option.value === value)
 
   const filteredOptions = useMemo(() => {
-    const normalizedSearchTerm = searchTerm.trim().toLowerCase()
+    const normalizedSearchTerm = normalizeSearchText(searchTerm)
+    const compactSearchTerm = normalizeSearchTextCompact(searchTerm)
 
     if (!normalizedSearchTerm) return options
 
     return options.filter((option) => {
-      const normalizedLabel = option.label.toLowerCase()
-      const normalizedKeywords = option.keywords?.toLowerCase() ?? ""
+      const normalizedLabel = normalizeSearchText(option.label)
+      const normalizedKeywords = normalizeSearchText(option.keywords ?? "")
+      const compactLabel = normalizeSearchTextCompact(option.label)
+      const compactKeywords = normalizeSearchTextCompact(option.keywords ?? "")
+
       return (
         normalizedLabel.includes(normalizedSearchTerm) ||
-        normalizedKeywords.includes(normalizedSearchTerm)
+        normalizedKeywords.includes(normalizedSearchTerm) ||
+        (compactSearchTerm.length > 0 &&
+          (compactLabel.includes(compactSearchTerm) ||
+            compactKeywords.includes(compactSearchTerm)))
       )
     })
   }, [options, searchTerm])
@@ -106,6 +126,25 @@ function SearchableSelect({
             autoFocus
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
+            onKeyDown={(event) => {
+              if (!autoSelectOnEnter || event.key !== "Enter") {
+                return
+              }
+
+              if (filteredOptions.length !== 1) {
+                return
+              }
+
+              const onlyOption = filteredOptions[0]
+              if (!onlyOption) {
+                return
+              }
+
+              event.preventDefault()
+              onValueChange(onlyOption.value)
+              setIsOpen(false)
+              setSearchTerm("")
+            }}
             placeholder={searchPlaceholder}
           />
 

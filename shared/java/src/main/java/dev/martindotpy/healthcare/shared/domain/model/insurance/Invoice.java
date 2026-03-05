@@ -28,9 +28,9 @@ public class Invoice extends PanacheEntityBase {
     public UUID id;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     public Appointment appointment;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     public InsuranceProvider insuranceProvider;
     @NotNull
     @Column(precision = 10, scale = 2)

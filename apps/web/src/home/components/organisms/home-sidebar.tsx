@@ -60,7 +60,7 @@ export function HomeSidebar({
                     <SidebarMenuButton
                       tooltip={item.label}
                       className="flex items-center gap-2 transition-colors group-data-[collapsible=icon]:px-1.5!"
-                      isActive={isActive}
+                      isActive={Boolean(isActive)}
                       render={
                         <Link to={item.to} preload={false}>
                           <item.icon className="size-5!" />

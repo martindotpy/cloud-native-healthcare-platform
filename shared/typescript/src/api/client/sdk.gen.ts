@@ -41,6 +41,9 @@ import type {
   GetApiAppointmentCountResponses,
   GetApiAppointmentData,
   GetApiAppointmentErrors,
+  GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdData,
+  GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdErrors,
+  GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponses,
   GetApiAppointmentResponses,
   GetApiClinicalEpisodeByIdData,
   GetApiClinicalEpisodeByIdErrors,
@@ -78,6 +81,9 @@ import type {
   GetApiHealthRecordData,
   GetApiHealthRecordErrors,
   GetApiHealthRecordResponses,
+  GetApiInsuranceInvoiceAvailableAppointmentsData,
+  GetApiInsuranceInvoiceAvailableAppointmentsErrors,
+  GetApiInsuranceInvoiceAvailableAppointmentsResponses,
   GetApiInsuranceInvoiceByIdData,
   GetApiInsuranceInvoiceByIdErrors,
   GetApiInsuranceInvoiceByIdResponses,
@@ -153,6 +159,9 @@ import type {
   PostApiHealthRecordData,
   PostApiHealthRecordErrors,
   PostApiHealthRecordResponses,
+  PostApiInsuranceInvoiceCreateByIdsData,
+  PostApiInsuranceInvoiceCreateByIdsErrors,
+  PostApiInsuranceInvoiceCreateByIdsResponses,
   PostApiInsuranceInvoiceData,
   PostApiInsuranceInvoiceErrors,
   PostApiInsuranceInvoiceResponses,
@@ -260,6 +269,27 @@ export const getApiAppointmentCount = <ThrowOnError extends boolean = false>(
   >({
     responseType: "json",
     url: "/api/appointment/count",
+    ...options,
+  })
+
+/**
+ * Get insurance summary for an appointment through SOAP client
+ */
+export const getApiAppointmentInsuranceSummaryByAppointmentByAppointmentId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdData,
+    ThrowOnError
+  >
+) =>
+  (options.client ?? client).get<
+    GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdResponses,
+    GetApiAppointmentInsuranceSummaryByAppointmentByAppointmentIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/appointment/insurance-summary/by-appointment/{appointmentId}",
     ...options,
   })
 
@@ -1018,6 +1048,27 @@ export const postApiInsuranceInvoice = <ThrowOnError extends boolean = false>(
     },
   })
 
+/**
+ * List appointments available for invoice creation
+ */
+export const getApiInsuranceInvoiceAvailableAppointments = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<
+    GetApiInsuranceInvoiceAvailableAppointmentsData,
+    ThrowOnError
+  >
+) =>
+  (options?.client ?? client).get<
+    GetApiInsuranceInvoiceAvailableAppointmentsResponses,
+    GetApiInsuranceInvoiceAvailableAppointmentsErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice/available-appointments",
+    ...options,
+  })
+
 export const getApiInsuranceInvoiceCount = <
   ThrowOnError extends boolean = false,
 >(
@@ -1031,6 +1082,28 @@ export const getApiInsuranceInvoiceCount = <
     responseType: "json",
     url: "/api/insurance/invoice/count",
     ...options,
+  })
+
+/**
+ * Create invoice using entity IDs
+ */
+export const postApiInsuranceInvoiceCreateByIds = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiInsuranceInvoiceCreateByIdsData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiInsuranceInvoiceCreateByIdsResponses,
+    PostApiInsuranceInvoiceCreateByIdsErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice/create-by-ids",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
   })
 
 /**

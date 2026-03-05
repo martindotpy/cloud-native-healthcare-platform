@@ -8,9 +8,9 @@ import {
   getApiFacilityOptions,
   getApiPatientOptions,
   postApiAppointmentMutation,
-  postApiAppointmentValidateMutation,
   putApiAppointmentByIdMutation,
 } from "@healthcare/shared/api/client/@tanstack/react-query.gen"
+import { client } from "@healthcare/shared/api/client/client.gen"
 import type {
   OpenapiAppointment,
   OpenapiAppointmentStatus,
@@ -44,7 +44,7 @@ import {
 } from "@healthcare/web/core/components/ui/searchable-select"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import { TbCalendar, TbClockHour4, TbPencil, TbTrash } from "react-icons/tb"
 import { toast } from "sonner"
 
@@ -60,6 +60,18 @@ interface AppointmentFormState {
   facilityId: string
   scheduledAt: string
   status: OpenapiAppointmentStatus
+}
+
+interface AppointmentInsuranceSummaryResponse {
+  found: boolean
+  message: string
+  invoiceId: string | null
+  appointmentId: string | null
+  insuranceProviderId: string | null
+  insuranceProviderName: string | null
+  totalAmount: number | null
+  paymentMethod: string | null
+  issuedAt: string | null
 }
 
 type AgendaValidationStatus =
@@ -216,13 +228,6 @@ function RouteComponent() {
   const [editingAppointment, setEditingAppointment] =
     useState<OpenapiAppointment | null>(null)
   const [form, setForm] = useState<AppointmentFormState>(defaultAppointmentForm)
-  const [agendaValidation, setAgendaValidation] =
-    useState<AgendaValidationState>({
-      status: "idle",
-      message: "Selecciona medico, sede y fecha para validar agenda",
-    })
-  const latestValidationRequestRef = useRef(0)
-  const lastValidatedPayloadRef = useRef("")
 
   const [appointmentToDelete, setAppointmentToDelete] =
     useState<OpenapiAppointment | null>(null)
@@ -283,6 +288,24 @@ function RouteComponent() {
   const patients = patientsQuery.data
   const total = countQuery.data ?? 0
   const totalPages = Math.max(1, Math.ceil(total / size))
+
+  const appointmentInsuranceSummaryQuery = useQuery({
+    queryKey: ["appointment-insurance-summary-soap", selectedAppointment?.id],
+    enabled: Boolean(selectedAppointment?.id),
+    queryFn: async () => {
+      const response = await client.get<
+        { 200: AppointmentInsuranceSummaryResponse },
+        never,
+        true
+      >({
+        url: `/api/appointment/insurance-summary/by-appointment/${selectedAppointment!.id}`,
+        throwOnError: true,
+        security: [{ type: "http", scheme: "bearer" }],
+      })
+
+      return response.data
+    },
+  })
 
   const filteredAppointments = useMemo(() => {
     if (!appointments) return []
@@ -401,21 +424,6 @@ function RouteComponent() {
     }))
   }, [doctors, facilityOptions, form.doctorId])
 
-  useEffect(() => {
-    if (!form.facilityId || !form.doctorId) return
-
-    const stillAvailable = formFacilityOptions.some(
-      (facility) => facility.value === form.facilityId
-    )
-
-    if (stillAvailable) return
-
-    setForm((previous) => ({
-      ...previous,
-      facilityId: "",
-    }))
-  }, [form.doctorId, form.facilityId, formFacilityOptions])
-
   const invalidateAppointments = async () => {
     await queryClient.invalidateQueries({
       queryKey: getApiAppointmentQueryKey(),
@@ -472,105 +480,93 @@ function RouteComponent() {
     },
   })
 
-  const validateMutation = useMutation({
-    ...postApiAppointmentValidateMutation({
+  const validateAgendaByEndpoint = async (
+    payload: NonNullable<ReturnType<typeof buildAgendaValidationPayload>>
+  ): Promise<OpenapiAppointmentValidationResponse> => {
+    const response = await client.post<
+      { 200: OpenapiAppointmentValidationResponse },
+      never,
+      true
+    >({
+      url: "/api/appointment/validate",
+      body: payload,
+      throwOnError: true,
       security: [{ type: "http", scheme: "bearer" }],
-    }),
-  })
-
-  const agendaValidationPayload = useMemo(
-    () => buildAgendaValidationPayload(form, editingAppointment?.id),
-    [form, editingAppointment?.id]
-  )
-
-  const agendaValidationPayloadKey = useMemo(
-    () =>
-      agendaValidationPayload ? JSON.stringify(agendaValidationPayload) : "",
-    [agendaValidationPayload]
-  )
-
-  useEffect(() => {
-    if (!isFormOpen) {
-      setAgendaValidation((previous) => {
-        if (
-          previous.status === "idle" &&
-          previous.message ===
-            "Selecciona medico, sede y fecha para validar agenda"
-        ) {
-          return previous
-        }
-
-        return {
-          status: "idle",
-          message: "Selecciona medico, sede y fecha para validar agenda",
-        }
-      })
-      return
-    }
-
-    if (!agendaValidationPayload) {
-      setAgendaValidation((previous) => {
-        if (
-          previous.status === "idle" &&
-          previous.message ===
-            "Selecciona medico, sede y fecha para validar agenda"
-        ) {
-          return previous
-        }
-
-        return {
-          status: "idle",
-          message: "Selecciona medico, sede y fecha para validar agenda",
-        }
-      })
-      return
-    }
-
-    setAgendaValidation({
-      status: "validating",
-      message: "Validando disponibilidad del medico en esa sede...",
     })
 
-    const requestId = ++latestValidationRequestRef.current
+    return response.data
+  }
 
-    const timeoutId = window.setTimeout(async () => {
-      try {
-        const result = await validateMutation.mutateAsync({
-          body: agendaValidationPayload,
-        })
+  const agendaValidationPayload = buildAgendaValidationPayload(
+    form,
+    editingAppointment?.id
+  )
 
-        if (requestId !== latestValidationRequestRef.current) return
+  const agendaValidationPayloadKey = agendaValidationPayload
+    ? JSON.stringify(agendaValidationPayload)
+    : ""
 
-        lastValidatedPayloadRef.current = agendaValidationPayloadKey
+  const agendaValidationQuery = useQuery({
+    queryKey: [
+      "appointment-agenda-validation",
+      agendaValidationPayloadKey,
+      agendaValidationPayload,
+    ],
+    enabled: isFormOpen && Boolean(agendaValidationPayload),
+    retry: false,
+    queryFn: async () => validateAgendaByEndpoint(agendaValidationPayload!),
+  })
 
-        if (result.valid) {
-          setAgendaValidation({
-            status: "valid",
-            message: result.message || "Horario disponible",
-          })
-          return
-        }
+  const {
+    data: agendaValidationResult,
+    isPending: isAgendaValidationPending,
+    isError: isAgendaValidationError,
+  } = agendaValidationQuery
 
-        setAgendaValidation({
-          status: "invalid",
-          message:
-            result.message ||
-            "El medico no atiende en la sede o ya tiene conflicto de agenda",
-        })
-      } catch {
-        if (requestId !== latestValidationRequestRef.current) return
-
-        setAgendaValidation({
-          status: "error",
-          message: "No se pudo validar la agenda en este momento",
-        })
+  const agendaValidation: AgendaValidationState = useMemo(() => {
+    if (!isFormOpen || !agendaValidationPayload) {
+      return {
+        status: "idle",
+        message: "Selecciona medico, sede y fecha para validar agenda",
       }
-    }, 350)
-
-    return () => {
-      window.clearTimeout(timeoutId)
     }
-  }, [isFormOpen, agendaValidationPayload, agendaValidationPayloadKey])
+
+    if (isAgendaValidationPending) {
+      return {
+        status: "validating",
+        message: "Validando disponibilidad del medico en esa sede...",
+      }
+    }
+
+    if (isAgendaValidationError) {
+      return {
+        status: "error",
+        message: "No se pudo validar la agenda en este momento",
+      }
+    }
+
+    const result = agendaValidationResult
+
+    if (!result || !result.valid) {
+      return {
+        status: "invalid",
+        message:
+          result?.message ||
+          "El medico no atiende en la sede o ya tiene conflicto de agenda",
+      }
+    }
+
+    return {
+      status: "valid",
+      message: result.message || "Horario disponible",
+    }
+  }, [
+    isFormOpen,
+    agendaValidationPayload,
+    agendaValidationResult,
+    isAgendaValidationPending,
+    isAgendaValidationError,
+  ])
 
   const openCreateDialog = () => {
     setEditingAppointment(null)
@@ -629,28 +625,11 @@ function RouteComponent() {
       return
     }
 
-    if (
-      agendaValidationPayload &&
-      agendaValidationPayloadKey !== lastValidatedPayloadRef.current
-    ) {
-      const validation: OpenapiAppointmentValidationResponse =
-        await validateMutation.mutateAsync({
-          body: agendaValidationPayload,
-        })
-
-      lastValidatedPayloadRef.current = agendaValidationPayloadKey
-
-      if (!validation.valid) {
-        setAgendaValidation({
-          status: "invalid",
-          message:
-            validation.message || "La cita no cumple las reglas de agenda",
-        })
-        toast.error(
-          validation.message || "La cita no cumple las reglas de agenda"
-        )
-        return
-      }
+    if (agendaValidation.status !== "valid") {
+      toast.error(
+        agendaValidation.message || "La cita no cumple las reglas de agenda"
+      )
+      return
     }
 
     if (editingAppointment) {
@@ -1007,6 +986,7 @@ function RouteComponent() {
                   }))
                 }}
                 options={patientOptions}
+                autoSelectOnEnter
                 placeholder="Selecciona un paciente"
                 searchPlaceholder="Buscar por DNI o telefono..."
                 emptyMessage="No hay pacientes coincidentes"
@@ -1020,9 +1000,21 @@ function RouteComponent() {
                 id="doctorId"
                 value={form.doctorId}
                 onValueChange={(value) => {
+                  const selectedDoctor = (doctors ?? []).find(
+                    (doctor) => doctor.id === value
+                  )
+                  const availableFacilityIds = new Set(
+                    (selectedDoctor?.facilities ?? []).map(
+                      (facility) => facility.id
+                    )
+                  )
+
                   setForm((previous) => ({
                     ...previous,
                     doctorId: value,
+                    facilityId: availableFacilityIds.has(previous.facilityId)
+                      ? previous.facilityId
+                      : "",
                   }))
                 }}
                 options={doctorOptions}
@@ -1189,6 +1181,53 @@ function RouteComponent() {
                 <p className="text-right font-medium">
                   {new Date(selectedAppointment.scheduledDate).toLocaleString()}
                 </p>
+              </div>
+
+              <div className="rounded-lg border p-3">
+                <p className="mb-2 inline-flex rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                  Integracion SOAP inter-servicio: appointment -&gt; insurance
+                </p>
+
+                {appointmentInsuranceSummaryQuery.isLoading ? (
+                  <p className="text-muted-foreground text-xs">
+                    Consultando resumen financiero por SOAP...
+                  </p>
+                ) : appointmentInsuranceSummaryQuery.data ? (
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <p className="text-muted-foreground">Estado</p>
+                    <p className="text-right font-medium">
+                      {appointmentInsuranceSummaryQuery.data.found
+                        ? "Factura encontrada"
+                        : "Sin factura"}
+                    </p>
+
+                    <p className="text-muted-foreground">Detalle</p>
+                    <p className="text-right font-medium">
+                      {appointmentInsuranceSummaryQuery.data.message}
+                    </p>
+
+                    <p className="text-muted-foreground">Aseguradora</p>
+                    <p className="text-right font-medium">
+                      {appointmentInsuranceSummaryQuery.data
+                        .insuranceProviderName ?? "Sin aseguradora"}
+                    </p>
+
+                    <p className="text-muted-foreground">Total</p>
+                    <p className="text-right font-medium">
+                      {appointmentInsuranceSummaryQuery.data.totalAmount ?? 0}
+                    </p>
+
+                    <p className="text-muted-foreground">Metodo de pago</p>
+                    <p className="text-right font-medium">
+                      {appointmentInsuranceSummaryQuery.data.paymentMethod ??
+                        "-"}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-xs">
+                    No se obtuvo resumen financiero.
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-wrap justify-end gap-2">

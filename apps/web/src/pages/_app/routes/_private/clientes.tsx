@@ -17,6 +17,34 @@ import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { toast } from "sonner"
 
+const getApiErrorMessage = (error: unknown, fallback: string) => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "response" in error &&
+    typeof error.response === "object" &&
+    error.response !== null &&
+    "data" in error.response
+  ) {
+    const data = (error.response as { data?: unknown }).data
+
+    if (typeof data === "string" && data.trim().length > 0) {
+      return data
+    }
+
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "detail" in data &&
+      typeof data.detail === "string"
+    ) {
+      return data.detail
+    }
+  }
+
+  return fallback
+}
+
 export const Route = createFileRoute("/_private/clientes")({
   component: ClientsPage,
 })
@@ -52,22 +80,35 @@ function ClientsPage() {
       setPhone("")
       toast.success("Cliente registrado")
     },
-    onError: () => {
-      toast.error("No se pudo registrar el cliente")
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error, "No se pudo registrar el cliente"))
     },
   })
 
   const handleCreatePatient = async () => {
-    if (!nationalId.trim() || !phone.trim()) {
+    const trimmedNationalId = nationalId.trim()
+    const trimmedPhone = phone.trim()
+
+    if (!trimmedNationalId || !trimmedPhone) {
       toast.error("Completa DNI y telefono")
+      return
+    }
+
+    if (!/^\d{8}$/.test(trimmedNationalId)) {
+      toast.error("El DNI debe tener 8 digitos numericos")
+      return
+    }
+
+    if (!/^\d{9}$/.test(trimmedPhone)) {
+      toast.error("El telefono debe tener 9 digitos numericos")
       return
     }
 
     await createPatientMutation.mutateAsync({
       body: {
         id: crypto.randomUUID(),
-        nationalId: nationalId.trim(),
-        phone: phone.trim(),
+        nationalId: trimmedNationalId,
+        phone: trimmedPhone,
       },
     })
   }
@@ -107,7 +148,7 @@ function ClientsPage() {
                 id="patient-phone"
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
-                placeholder="+51987654321"
+                placeholder="987654321"
               />
             </Field>
             <Button

@@ -17,6 +17,7 @@ import {
   insuranceProviderTable,
   invoiceTable,
 } from "@healthcare/database/insurance/schema/insurance-schema"
+import { sql } from "drizzle-orm"
 
 const facilityNames = [
   "CMCH - San Martin de Porres",
@@ -301,6 +302,11 @@ async function insertInChunks<TTable, TValue>(
 export async function runCmchSeed() {
   const rng = createRng(20260305)
 
+  // Normalize legacy enum values from previous seeds.
+  await db.execute(
+    sql`update health_record set status = upper(status) where status in ('active', 'inactive')`
+  )
+
   const facilities = facilityNames.map((name, index) => ({
     id: makeUuid(10_000 + index + 1),
     name,
@@ -359,7 +365,7 @@ export async function runCmchSeed() {
   const healthRecords = patients.map((patient, index) => ({
     id: makeUuid(50_000 + index + 1),
     patientId: patient.id,
-    status: index % 12 === 0 ? "inactive" : "active",
+    status: index % 12 === 0 ? "INACTIVE" : "ACTIVE",
     createdAt: new Date(Date.UTC(2024, 0, 1 + (index % 25), 8, 0, 0)),
   }))
 
@@ -385,7 +391,7 @@ export async function runCmchSeed() {
           : statusCanceled
 
     const date = new Date(
-      Date.UTC(2026, 2, 5 + dayOffset, randomInt(rng, 8, 19), 0, 0)
+      Date.UTC(2025, 2, 5 + dayOffset, randomInt(rng, 8, 19), 0, 0)
     )
 
     return {
