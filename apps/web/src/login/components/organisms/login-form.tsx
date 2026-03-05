@@ -7,8 +7,6 @@ import { ControlledCheckbox } from "@healthcare/web/core/components/form/control
 import { ControlledInput } from "@healthcare/web/core/components/form/controlled/controlled-input"
 import { ControlledPasswordInput } from "@healthcare/web/core/components/form/controlled/controlled-password-input"
 import { Button } from "@healthcare/web/core/components/ui/button"
-import { Link } from "@healthcare/web/core/components/ui/link"
-import { Separator } from "@healthcare/web/core/components/ui/separator"
 import { Route as PublicRoute } from "@healthcare/web/pages/_app/routes/_public/route"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "@tanstack/react-router"
@@ -97,28 +95,6 @@ export function LoginForm() {
       >
         {formState.isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
       </Button>
-
-      <div className="mt-2 flex items-center justify-center">
-        <div className="flex-1">
-          <Separator />
-        </div>
-
-        <span className="text-muted-foreground mx-2 text-sm">
-          ¿No tienes una cuenta?
-        </span>
-
-        <div className="flex-1">
-          <Separator />
-        </div>
-      </div>
-
-      <Link
-        to="/sign-up"
-        variant="secondary"
-        className="mt-2 w-full"
-      >
-        Regístrate
-      </Link>
     </form>
   )
 }
