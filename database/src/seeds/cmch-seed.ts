@@ -46,7 +46,7 @@ const specialtyNames = [
   "Reumatologia",
 ]
 
-const firstNames = [
+const firstNamePool = [
   "Ana",
   "Jose",
   "Luis",
@@ -67,9 +67,54 @@ const firstNames = [
   "Alonso",
   "Gabriela",
   "Sergio",
+  "Camila",
+  "Sebastian",
+  "Daniel",
+  "Javier",
+  "Renato",
+  "Ariana",
+  "Ximena",
+  "Rocio",
+  "Daniela",
+  "Milagros",
+  "Juan",
+  "Elena",
+  "Pilar",
+  "Carolina",
+  "Bruno",
+  "Fabian",
+  "Mariana",
+  "Silvia",
+  "Liliana",
+  "Raul",
+  "Nicolas",
+  "Hector",
+  "Aldo",
+  "Sofia",
+  "Fiorella",
+  "Noelia",
+  "Tomas",
+  "Victor",
 ]
 
-const lastNames = [
+const middleNamePool = [
+  "Del Carmen",
+  "De Los Angeles",
+  "Cristina",
+  "Alejandra",
+  "Isabel",
+  "Eduardo",
+  "Antonio",
+  "Enrique",
+  "Martin",
+  "Gabriel",
+  "Victoria",
+  "Soledad",
+  "Beatriz",
+  "Teresa",
+]
+
+const lastNamePool = [
   "Perez",
   "Sanchez",
   "Garcia",
@@ -90,6 +135,20 @@ const lastNames = [
   "Morales",
   "Paredes",
   "Navarro",
+  "Quispe",
+  "Rojas",
+  "Salazar",
+  "Campos",
+  "Huaman",
+  "Vega",
+  "Espinoza",
+  "Palacios",
+  "Ortega",
+  "Cabrera",
+  "Araujo",
+  "Reyes",
+  "Peña",
+  "Valdivia",
 ]
 
 const diagnosisPool = [
@@ -123,6 +182,23 @@ const medicationPool = [
   "Loratadina 10mg",
   "Salbutamol inhalador",
 ]
+
+const buildDoctorName = (rng: () => number) => {
+  const firstName = pickOne(rng, firstNamePool)
+  const includeMiddleName = rng() > 0.68
+  const middleName = includeMiddleName ? ` ${pickOne(rng, middleNamePool)}` : ""
+
+  const firstLastName = pickOne(rng, lastNamePool)
+  const secondLastName = pickOne(
+    rng,
+    lastNamePool.filter((lastName) => lastName !== firstLastName)
+  )
+
+  return {
+    firstName: `${firstName}${middleName}`,
+    lastName: `${firstLastName} ${secondLastName}`,
+  }
+}
 
 const instructionPool = [
   "Tomar cada 8 horas despues de alimentos por 5 dias.",
@@ -237,13 +313,13 @@ export async function runCmchSeed() {
   }))
 
   const doctors = Array.from({ length: 64 }, (_, index) => {
-    const firstName = firstNames[index % firstNames.length] as string
-    const lastName = lastNames[(index * 3) % lastNames.length] as string
+    const name = buildDoctorName(rng)
+
     return {
       id: makeUuid(30_000 + index + 1),
       medicalLicense: `CMP${(10_000 + index).toString().padStart(6, "0")}`,
-      firstName,
-      lastName,
+      firstName: name.firstName,
+      lastName: name.lastName,
     }
   })
 
