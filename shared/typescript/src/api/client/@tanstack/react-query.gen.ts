@@ -12,38 +12,86 @@ import type { AxiosError } from "axios"
 import { client } from "../client.gen"
 import {
   deleteApiAppointmentById,
+  deleteApiClinicalEpisodeById,
   deleteApiDoctorById,
   deleteApiFacilityById,
+  deleteApiHealthRecordById,
+  deleteApiInsuranceInvoiceById,
+  deleteApiInsuranceProviderById,
+  deleteApiPatientById,
+  deleteApiPrescriptionById,
   deleteApiSpecialtyById,
   getApiAppointment,
   getApiAppointmentById,
   getApiAppointmentCount,
+  getApiClinicalEpisode,
+  getApiClinicalEpisodeById,
+  getApiClinicalEpisodeCount,
   getApiDoctor,
   getApiDoctorById,
   getApiDoctorCount,
   getApiFacility,
   getApiFacilityById,
   getApiFacilityCount,
+  getApiHealthRecord,
+  getApiHealthRecordById,
+  getApiHealthRecordCount,
+  getApiInsuranceInvoice,
+  getApiInsuranceInvoiceById,
+  getApiInsuranceInvoiceCount,
+  getApiInsuranceProvider,
+  getApiInsuranceProviderById,
+  getApiInsuranceProviderCount,
+  getApiPatient,
+  getApiPatientById,
+  getApiPatientCount,
+  getApiPrescription,
+  getApiPrescriptionById,
+  getApiPrescriptionCount,
   getApiSpecialty,
   getApiSpecialtyById,
   getApiSpecialtyCount,
   type Options,
   postApiAppointment,
+  postApiClinicalEpisode,
   postApiDoctor,
   postApiFacility,
+  postApiHealthRecord,
+  postApiInsuranceInvoice,
+  postApiInsuranceProvider,
+  postApiPatient,
+  postApiPrescription,
   postApiSpecialty,
   putApiAppointmentById,
+  putApiClinicalEpisodeById,
   putApiDoctorById,
   putApiFacilityById,
+  putApiHealthRecordById,
+  putApiInsuranceInvoiceById,
+  putApiInsuranceProviderById,
+  putApiPatientById,
+  putApiPrescriptionById,
   putApiSpecialtyById,
 } from "../sdk.gen"
 import type {
   DeleteApiAppointmentByIdData,
   DeleteApiAppointmentByIdResponse,
+  DeleteApiClinicalEpisodeByIdData,
+  DeleteApiClinicalEpisodeByIdResponse,
   DeleteApiDoctorByIdData,
   DeleteApiDoctorByIdResponse,
   DeleteApiFacilityByIdData,
   DeleteApiFacilityByIdResponse,
+  DeleteApiHealthRecordByIdData,
+  DeleteApiHealthRecordByIdResponse,
+  DeleteApiInsuranceInvoiceByIdData,
+  DeleteApiInsuranceInvoiceByIdResponse,
+  DeleteApiInsuranceProviderByIdData,
+  DeleteApiInsuranceProviderByIdResponse,
+  DeleteApiPatientByIdData,
+  DeleteApiPatientByIdResponse,
+  DeleteApiPrescriptionByIdData,
+  DeleteApiPrescriptionByIdResponse,
   DeleteApiSpecialtyByIdData,
   DeleteApiSpecialtyByIdResponse,
   GetApiAppointmentByIdData,
@@ -52,6 +100,12 @@ import type {
   GetApiAppointmentCountResponse,
   GetApiAppointmentData,
   GetApiAppointmentResponse,
+  GetApiClinicalEpisodeByIdData,
+  GetApiClinicalEpisodeByIdResponse,
+  GetApiClinicalEpisodeCountData,
+  GetApiClinicalEpisodeCountResponse,
+  GetApiClinicalEpisodeData,
+  GetApiClinicalEpisodeResponse,
   GetApiDoctorByIdData,
   GetApiDoctorByIdResponse,
   GetApiDoctorCountData,
@@ -64,6 +118,36 @@ import type {
   GetApiFacilityCountResponse,
   GetApiFacilityData,
   GetApiFacilityResponse,
+  GetApiHealthRecordByIdData,
+  GetApiHealthRecordByIdResponse,
+  GetApiHealthRecordCountData,
+  GetApiHealthRecordCountResponse,
+  GetApiHealthRecordData,
+  GetApiHealthRecordResponse,
+  GetApiInsuranceInvoiceByIdData,
+  GetApiInsuranceInvoiceByIdResponse,
+  GetApiInsuranceInvoiceCountData,
+  GetApiInsuranceInvoiceCountResponse,
+  GetApiInsuranceInvoiceData,
+  GetApiInsuranceInvoiceResponse,
+  GetApiInsuranceProviderByIdData,
+  GetApiInsuranceProviderByIdResponse,
+  GetApiInsuranceProviderCountData,
+  GetApiInsuranceProviderCountResponse,
+  GetApiInsuranceProviderData,
+  GetApiInsuranceProviderResponse,
+  GetApiPatientByIdData,
+  GetApiPatientByIdResponse,
+  GetApiPatientCountData,
+  GetApiPatientCountResponse,
+  GetApiPatientData,
+  GetApiPatientResponse,
+  GetApiPrescriptionByIdData,
+  GetApiPrescriptionByIdResponse,
+  GetApiPrescriptionCountData,
+  GetApiPrescriptionCountResponse,
+  GetApiPrescriptionData,
+  GetApiPrescriptionResponse,
   GetApiSpecialtyByIdData,
   GetApiSpecialtyByIdResponse,
   GetApiSpecialtyCountData,
@@ -72,18 +156,42 @@ import type {
   GetApiSpecialtyResponse,
   PostApiAppointmentData,
   PostApiAppointmentResponse,
+  PostApiClinicalEpisodeData,
+  PostApiClinicalEpisodeResponse,
   PostApiDoctorData,
   PostApiDoctorResponse,
   PostApiFacilityData,
   PostApiFacilityResponse,
+  PostApiHealthRecordData,
+  PostApiHealthRecordResponse,
+  PostApiInsuranceInvoiceData,
+  PostApiInsuranceInvoiceResponse,
+  PostApiInsuranceProviderData,
+  PostApiInsuranceProviderResponse,
+  PostApiPatientData,
+  PostApiPatientResponse,
+  PostApiPrescriptionData,
+  PostApiPrescriptionResponse,
   PostApiSpecialtyData,
   PostApiSpecialtyResponse,
   PutApiAppointmentByIdData,
   PutApiAppointmentByIdResponse,
+  PutApiClinicalEpisodeByIdData,
+  PutApiClinicalEpisodeByIdResponse,
   PutApiDoctorByIdData,
   PutApiDoctorByIdResponse,
   PutApiFacilityByIdData,
   PutApiFacilityByIdResponse,
+  PutApiHealthRecordByIdData,
+  PutApiHealthRecordByIdResponse,
+  PutApiInsuranceInvoiceByIdData,
+  PutApiInsuranceInvoiceByIdResponse,
+  PutApiInsuranceProviderByIdData,
+  PutApiInsuranceProviderByIdResponse,
+  PutApiPatientByIdData,
+  PutApiPatientByIdResponse,
+  PutApiPrescriptionByIdData,
+  PutApiPrescriptionByIdResponse,
   PutApiSpecialtyByIdData,
   PutApiSpecialtyByIdResponse,
 } from "../types.gen"
@@ -922,6 +1030,1167 @@ export const putApiSpecialtyByIdMutation = (
   > = {
     mutationFn: async (fnOptions) => {
       const { data } = await putApiSpecialtyById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiClinicalEpisodeQueryKey = (
+  options?: Options<GetApiClinicalEpisodeData>
+) => createQueryKey("getApiClinicalEpisode", options)
+
+export const getApiClinicalEpisodeOptions = (
+  options?: Options<GetApiClinicalEpisodeData>
+) =>
+  queryOptions<
+    GetApiClinicalEpisodeResponse,
+    AxiosError<DefaultError>,
+    GetApiClinicalEpisodeResponse,
+    ReturnType<typeof getApiClinicalEpisodeQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiClinicalEpisode({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiClinicalEpisodeQueryKey(options),
+  })
+
+export const getApiClinicalEpisodeInfiniteQueryKey = (
+  options?: Options<GetApiClinicalEpisodeData>
+): QueryKey<Options<GetApiClinicalEpisodeData>> =>
+  createQueryKey("getApiClinicalEpisode", options, true)
+
+export const getApiClinicalEpisodeInfiniteOptions = (
+  options?: Options<GetApiClinicalEpisodeData>
+) =>
+  infiniteQueryOptions<
+    GetApiClinicalEpisodeResponse,
+    AxiosError<DefaultError>,
+    InfiniteData<GetApiClinicalEpisodeResponse>,
+    QueryKey<Options<GetApiClinicalEpisodeData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiClinicalEpisodeData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiClinicalEpisodeData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiClinicalEpisode({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiClinicalEpisodeInfiniteQueryKey(options),
+    }
+  )
+
+export const postApiClinicalEpisodeMutation = (
+  options?: Partial<Options<PostApiClinicalEpisodeData>>
+): UseMutationOptions<
+  PostApiClinicalEpisodeResponse,
+  AxiosError<DefaultError>,
+  Options<PostApiClinicalEpisodeData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiClinicalEpisodeResponse,
+    AxiosError<DefaultError>,
+    Options<PostApiClinicalEpisodeData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiClinicalEpisode({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiClinicalEpisodeCountQueryKey = (
+  options?: Options<GetApiClinicalEpisodeCountData>
+) => createQueryKey("getApiClinicalEpisodeCount", options)
+
+export const getApiClinicalEpisodeCountOptions = (
+  options?: Options<GetApiClinicalEpisodeCountData>
+) =>
+  queryOptions<
+    GetApiClinicalEpisodeCountResponse,
+    AxiosError<DefaultError>,
+    GetApiClinicalEpisodeCountResponse,
+    ReturnType<typeof getApiClinicalEpisodeCountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiClinicalEpisodeCount({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiClinicalEpisodeCountQueryKey(options),
+  })
+
+export const deleteApiClinicalEpisodeByIdMutation = (
+  options?: Partial<Options<DeleteApiClinicalEpisodeByIdData>>
+): UseMutationOptions<
+  DeleteApiClinicalEpisodeByIdResponse,
+  AxiosError<DefaultError>,
+  Options<DeleteApiClinicalEpisodeByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiClinicalEpisodeByIdResponse,
+    AxiosError<DefaultError>,
+    Options<DeleteApiClinicalEpisodeByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiClinicalEpisodeById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiClinicalEpisodeByIdQueryKey = (
+  options: Options<GetApiClinicalEpisodeByIdData>
+) => createQueryKey("getApiClinicalEpisodeById", options)
+
+export const getApiClinicalEpisodeByIdOptions = (
+  options: Options<GetApiClinicalEpisodeByIdData>
+) =>
+  queryOptions<
+    GetApiClinicalEpisodeByIdResponse,
+    AxiosError<DefaultError>,
+    GetApiClinicalEpisodeByIdResponse,
+    ReturnType<typeof getApiClinicalEpisodeByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiClinicalEpisodeById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiClinicalEpisodeByIdQueryKey(options),
+  })
+
+export const putApiClinicalEpisodeByIdMutation = (
+  options?: Partial<Options<PutApiClinicalEpisodeByIdData>>
+): UseMutationOptions<
+  PutApiClinicalEpisodeByIdResponse,
+  AxiosError<DefaultError>,
+  Options<PutApiClinicalEpisodeByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiClinicalEpisodeByIdResponse,
+    AxiosError<DefaultError>,
+    Options<PutApiClinicalEpisodeByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiClinicalEpisodeById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiHealthRecordQueryKey = (
+  options?: Options<GetApiHealthRecordData>
+) => createQueryKey("getApiHealthRecord", options)
+
+export const getApiHealthRecordOptions = (
+  options?: Options<GetApiHealthRecordData>
+) =>
+  queryOptions<
+    GetApiHealthRecordResponse,
+    AxiosError<DefaultError>,
+    GetApiHealthRecordResponse,
+    ReturnType<typeof getApiHealthRecordQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiHealthRecord({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiHealthRecordQueryKey(options),
+  })
+
+export const getApiHealthRecordInfiniteQueryKey = (
+  options?: Options<GetApiHealthRecordData>
+): QueryKey<Options<GetApiHealthRecordData>> =>
+  createQueryKey("getApiHealthRecord", options, true)
+
+export const getApiHealthRecordInfiniteOptions = (
+  options?: Options<GetApiHealthRecordData>
+) =>
+  infiniteQueryOptions<
+    GetApiHealthRecordResponse,
+    AxiosError<DefaultError>,
+    InfiniteData<GetApiHealthRecordResponse>,
+    QueryKey<Options<GetApiHealthRecordData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiHealthRecordData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiHealthRecordData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiHealthRecord({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiHealthRecordInfiniteQueryKey(options),
+    }
+  )
+
+export const postApiHealthRecordMutation = (
+  options?: Partial<Options<PostApiHealthRecordData>>
+): UseMutationOptions<
+  PostApiHealthRecordResponse,
+  AxiosError<DefaultError>,
+  Options<PostApiHealthRecordData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiHealthRecordResponse,
+    AxiosError<DefaultError>,
+    Options<PostApiHealthRecordData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiHealthRecord({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiHealthRecordCountQueryKey = (
+  options?: Options<GetApiHealthRecordCountData>
+) => createQueryKey("getApiHealthRecordCount", options)
+
+export const getApiHealthRecordCountOptions = (
+  options?: Options<GetApiHealthRecordCountData>
+) =>
+  queryOptions<
+    GetApiHealthRecordCountResponse,
+    AxiosError<DefaultError>,
+    GetApiHealthRecordCountResponse,
+    ReturnType<typeof getApiHealthRecordCountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiHealthRecordCount({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiHealthRecordCountQueryKey(options),
+  })
+
+export const deleteApiHealthRecordByIdMutation = (
+  options?: Partial<Options<DeleteApiHealthRecordByIdData>>
+): UseMutationOptions<
+  DeleteApiHealthRecordByIdResponse,
+  AxiosError<DefaultError>,
+  Options<DeleteApiHealthRecordByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiHealthRecordByIdResponse,
+    AxiosError<DefaultError>,
+    Options<DeleteApiHealthRecordByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiHealthRecordById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiHealthRecordByIdQueryKey = (
+  options: Options<GetApiHealthRecordByIdData>
+) => createQueryKey("getApiHealthRecordById", options)
+
+export const getApiHealthRecordByIdOptions = (
+  options: Options<GetApiHealthRecordByIdData>
+) =>
+  queryOptions<
+    GetApiHealthRecordByIdResponse,
+    AxiosError<DefaultError>,
+    GetApiHealthRecordByIdResponse,
+    ReturnType<typeof getApiHealthRecordByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiHealthRecordById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiHealthRecordByIdQueryKey(options),
+  })
+
+export const putApiHealthRecordByIdMutation = (
+  options?: Partial<Options<PutApiHealthRecordByIdData>>
+): UseMutationOptions<
+  PutApiHealthRecordByIdResponse,
+  AxiosError<DefaultError>,
+  Options<PutApiHealthRecordByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiHealthRecordByIdResponse,
+    AxiosError<DefaultError>,
+    Options<PutApiHealthRecordByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiHealthRecordById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPatientQueryKey = (options?: Options<GetApiPatientData>) =>
+  createQueryKey("getApiPatient", options)
+
+export const getApiPatientOptions = (options?: Options<GetApiPatientData>) =>
+  queryOptions<
+    GetApiPatientResponse,
+    AxiosError<DefaultError>,
+    GetApiPatientResponse,
+    ReturnType<typeof getApiPatientQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPatient({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPatientQueryKey(options),
+  })
+
+export const getApiPatientInfiniteQueryKey = (
+  options?: Options<GetApiPatientData>
+): QueryKey<Options<GetApiPatientData>> =>
+  createQueryKey("getApiPatient", options, true)
+
+export const getApiPatientInfiniteOptions = (
+  options?: Options<GetApiPatientData>
+) =>
+  infiniteQueryOptions<
+    GetApiPatientResponse,
+    AxiosError<DefaultError>,
+    InfiniteData<GetApiPatientResponse>,
+    QueryKey<Options<GetApiPatientData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiPatientData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiPatientData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiPatient({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiPatientInfiniteQueryKey(options),
+    }
+  )
+
+export const postApiPatientMutation = (
+  options?: Partial<Options<PostApiPatientData>>
+): UseMutationOptions<
+  PostApiPatientResponse,
+  AxiosError<DefaultError>,
+  Options<PostApiPatientData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiPatientResponse,
+    AxiosError<DefaultError>,
+    Options<PostApiPatientData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiPatient({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPatientCountQueryKey = (
+  options?: Options<GetApiPatientCountData>
+) => createQueryKey("getApiPatientCount", options)
+
+export const getApiPatientCountOptions = (
+  options?: Options<GetApiPatientCountData>
+) =>
+  queryOptions<
+    GetApiPatientCountResponse,
+    AxiosError<DefaultError>,
+    GetApiPatientCountResponse,
+    ReturnType<typeof getApiPatientCountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPatientCount({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPatientCountQueryKey(options),
+  })
+
+export const deleteApiPatientByIdMutation = (
+  options?: Partial<Options<DeleteApiPatientByIdData>>
+): UseMutationOptions<
+  DeleteApiPatientByIdResponse,
+  AxiosError<DefaultError>,
+  Options<DeleteApiPatientByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiPatientByIdResponse,
+    AxiosError<DefaultError>,
+    Options<DeleteApiPatientByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiPatientById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPatientByIdQueryKey = (
+  options: Options<GetApiPatientByIdData>
+) => createQueryKey("getApiPatientById", options)
+
+export const getApiPatientByIdOptions = (
+  options: Options<GetApiPatientByIdData>
+) =>
+  queryOptions<
+    GetApiPatientByIdResponse,
+    AxiosError<DefaultError>,
+    GetApiPatientByIdResponse,
+    ReturnType<typeof getApiPatientByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPatientById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPatientByIdQueryKey(options),
+  })
+
+export const putApiPatientByIdMutation = (
+  options?: Partial<Options<PutApiPatientByIdData>>
+): UseMutationOptions<
+  PutApiPatientByIdResponse,
+  AxiosError<DefaultError>,
+  Options<PutApiPatientByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiPatientByIdResponse,
+    AxiosError<DefaultError>,
+    Options<PutApiPatientByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiPatientById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPrescriptionQueryKey = (
+  options?: Options<GetApiPrescriptionData>
+) => createQueryKey("getApiPrescription", options)
+
+export const getApiPrescriptionOptions = (
+  options?: Options<GetApiPrescriptionData>
+) =>
+  queryOptions<
+    GetApiPrescriptionResponse,
+    AxiosError<DefaultError>,
+    GetApiPrescriptionResponse,
+    ReturnType<typeof getApiPrescriptionQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPrescription({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPrescriptionQueryKey(options),
+  })
+
+export const getApiPrescriptionInfiniteQueryKey = (
+  options?: Options<GetApiPrescriptionData>
+): QueryKey<Options<GetApiPrescriptionData>> =>
+  createQueryKey("getApiPrescription", options, true)
+
+export const getApiPrescriptionInfiniteOptions = (
+  options?: Options<GetApiPrescriptionData>
+) =>
+  infiniteQueryOptions<
+    GetApiPrescriptionResponse,
+    AxiosError<DefaultError>,
+    InfiniteData<GetApiPrescriptionResponse>,
+    QueryKey<Options<GetApiPrescriptionData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiPrescriptionData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiPrescriptionData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiPrescription({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiPrescriptionInfiniteQueryKey(options),
+    }
+  )
+
+export const postApiPrescriptionMutation = (
+  options?: Partial<Options<PostApiPrescriptionData>>
+): UseMutationOptions<
+  PostApiPrescriptionResponse,
+  AxiosError<DefaultError>,
+  Options<PostApiPrescriptionData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiPrescriptionResponse,
+    AxiosError<DefaultError>,
+    Options<PostApiPrescriptionData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiPrescription({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPrescriptionCountQueryKey = (
+  options?: Options<GetApiPrescriptionCountData>
+) => createQueryKey("getApiPrescriptionCount", options)
+
+export const getApiPrescriptionCountOptions = (
+  options?: Options<GetApiPrescriptionCountData>
+) =>
+  queryOptions<
+    GetApiPrescriptionCountResponse,
+    AxiosError<DefaultError>,
+    GetApiPrescriptionCountResponse,
+    ReturnType<typeof getApiPrescriptionCountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPrescriptionCount({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPrescriptionCountQueryKey(options),
+  })
+
+export const deleteApiPrescriptionByIdMutation = (
+  options?: Partial<Options<DeleteApiPrescriptionByIdData>>
+): UseMutationOptions<
+  DeleteApiPrescriptionByIdResponse,
+  AxiosError<DefaultError>,
+  Options<DeleteApiPrescriptionByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiPrescriptionByIdResponse,
+    AxiosError<DefaultError>,
+    Options<DeleteApiPrescriptionByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiPrescriptionById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPrescriptionByIdQueryKey = (
+  options: Options<GetApiPrescriptionByIdData>
+) => createQueryKey("getApiPrescriptionById", options)
+
+export const getApiPrescriptionByIdOptions = (
+  options: Options<GetApiPrescriptionByIdData>
+) =>
+  queryOptions<
+    GetApiPrescriptionByIdResponse,
+    AxiosError<DefaultError>,
+    GetApiPrescriptionByIdResponse,
+    ReturnType<typeof getApiPrescriptionByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPrescriptionById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPrescriptionByIdQueryKey(options),
+  })
+
+export const putApiPrescriptionByIdMutation = (
+  options?: Partial<Options<PutApiPrescriptionByIdData>>
+): UseMutationOptions<
+  PutApiPrescriptionByIdResponse,
+  AxiosError<DefaultError>,
+  Options<PutApiPrescriptionByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiPrescriptionByIdResponse,
+    AxiosError<DefaultError>,
+    Options<PutApiPrescriptionByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiPrescriptionById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInsuranceInvoiceQueryKey = (
+  options?: Options<GetApiInsuranceInvoiceData>
+) => createQueryKey("getApiInsuranceInvoice", options)
+
+export const getApiInsuranceInvoiceOptions = (
+  options?: Options<GetApiInsuranceInvoiceData>
+) =>
+  queryOptions<
+    GetApiInsuranceInvoiceResponse,
+    AxiosError<DefaultError>,
+    GetApiInsuranceInvoiceResponse,
+    ReturnType<typeof getApiInsuranceInvoiceQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInsuranceInvoice({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInsuranceInvoiceQueryKey(options),
+  })
+
+export const getApiInsuranceInvoiceInfiniteQueryKey = (
+  options?: Options<GetApiInsuranceInvoiceData>
+): QueryKey<Options<GetApiInsuranceInvoiceData>> =>
+  createQueryKey("getApiInsuranceInvoice", options, true)
+
+export const getApiInsuranceInvoiceInfiniteOptions = (
+  options?: Options<GetApiInsuranceInvoiceData>
+) =>
+  infiniteQueryOptions<
+    GetApiInsuranceInvoiceResponse,
+    AxiosError<DefaultError>,
+    InfiniteData<GetApiInsuranceInvoiceResponse>,
+    QueryKey<Options<GetApiInsuranceInvoiceData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiInsuranceInvoiceData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiInsuranceInvoiceData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiInsuranceInvoice({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiInsuranceInvoiceInfiniteQueryKey(options),
+    }
+  )
+
+export const postApiInsuranceInvoiceMutation = (
+  options?: Partial<Options<PostApiInsuranceInvoiceData>>
+): UseMutationOptions<
+  PostApiInsuranceInvoiceResponse,
+  AxiosError<DefaultError>,
+  Options<PostApiInsuranceInvoiceData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInsuranceInvoiceResponse,
+    AxiosError<DefaultError>,
+    Options<PostApiInsuranceInvoiceData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInsuranceInvoice({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInsuranceInvoiceCountQueryKey = (
+  options?: Options<GetApiInsuranceInvoiceCountData>
+) => createQueryKey("getApiInsuranceInvoiceCount", options)
+
+export const getApiInsuranceInvoiceCountOptions = (
+  options?: Options<GetApiInsuranceInvoiceCountData>
+) =>
+  queryOptions<
+    GetApiInsuranceInvoiceCountResponse,
+    AxiosError<DefaultError>,
+    GetApiInsuranceInvoiceCountResponse,
+    ReturnType<typeof getApiInsuranceInvoiceCountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInsuranceInvoiceCount({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInsuranceInvoiceCountQueryKey(options),
+  })
+
+export const deleteApiInsuranceInvoiceByIdMutation = (
+  options?: Partial<Options<DeleteApiInsuranceInvoiceByIdData>>
+): UseMutationOptions<
+  DeleteApiInsuranceInvoiceByIdResponse,
+  AxiosError<DefaultError>,
+  Options<DeleteApiInsuranceInvoiceByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiInsuranceInvoiceByIdResponse,
+    AxiosError<DefaultError>,
+    Options<DeleteApiInsuranceInvoiceByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiInsuranceInvoiceById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInsuranceInvoiceByIdQueryKey = (
+  options: Options<GetApiInsuranceInvoiceByIdData>
+) => createQueryKey("getApiInsuranceInvoiceById", options)
+
+export const getApiInsuranceInvoiceByIdOptions = (
+  options: Options<GetApiInsuranceInvoiceByIdData>
+) =>
+  queryOptions<
+    GetApiInsuranceInvoiceByIdResponse,
+    AxiosError<DefaultError>,
+    GetApiInsuranceInvoiceByIdResponse,
+    ReturnType<typeof getApiInsuranceInvoiceByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInsuranceInvoiceById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInsuranceInvoiceByIdQueryKey(options),
+  })
+
+export const putApiInsuranceInvoiceByIdMutation = (
+  options?: Partial<Options<PutApiInsuranceInvoiceByIdData>>
+): UseMutationOptions<
+  PutApiInsuranceInvoiceByIdResponse,
+  AxiosError<DefaultError>,
+  Options<PutApiInsuranceInvoiceByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiInsuranceInvoiceByIdResponse,
+    AxiosError<DefaultError>,
+    Options<PutApiInsuranceInvoiceByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiInsuranceInvoiceById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInsuranceProviderQueryKey = (
+  options?: Options<GetApiInsuranceProviderData>
+) => createQueryKey("getApiInsuranceProvider", options)
+
+export const getApiInsuranceProviderOptions = (
+  options?: Options<GetApiInsuranceProviderData>
+) =>
+  queryOptions<
+    GetApiInsuranceProviderResponse,
+    AxiosError<DefaultError>,
+    GetApiInsuranceProviderResponse,
+    ReturnType<typeof getApiInsuranceProviderQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInsuranceProvider({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInsuranceProviderQueryKey(options),
+  })
+
+export const getApiInsuranceProviderInfiniteQueryKey = (
+  options?: Options<GetApiInsuranceProviderData>
+): QueryKey<Options<GetApiInsuranceProviderData>> =>
+  createQueryKey("getApiInsuranceProvider", options, true)
+
+export const getApiInsuranceProviderInfiniteOptions = (
+  options?: Options<GetApiInsuranceProviderData>
+) =>
+  infiniteQueryOptions<
+    GetApiInsuranceProviderResponse,
+    AxiosError<DefaultError>,
+    InfiniteData<GetApiInsuranceProviderResponse>,
+    QueryKey<Options<GetApiInsuranceProviderData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiInsuranceProviderData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiInsuranceProviderData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiInsuranceProvider({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiInsuranceProviderInfiniteQueryKey(options),
+    }
+  )
+
+export const postApiInsuranceProviderMutation = (
+  options?: Partial<Options<PostApiInsuranceProviderData>>
+): UseMutationOptions<
+  PostApiInsuranceProviderResponse,
+  AxiosError<DefaultError>,
+  Options<PostApiInsuranceProviderData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInsuranceProviderResponse,
+    AxiosError<DefaultError>,
+    Options<PostApiInsuranceProviderData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInsuranceProvider({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInsuranceProviderCountQueryKey = (
+  options?: Options<GetApiInsuranceProviderCountData>
+) => createQueryKey("getApiInsuranceProviderCount", options)
+
+export const getApiInsuranceProviderCountOptions = (
+  options?: Options<GetApiInsuranceProviderCountData>
+) =>
+  queryOptions<
+    GetApiInsuranceProviderCountResponse,
+    AxiosError<DefaultError>,
+    GetApiInsuranceProviderCountResponse,
+    ReturnType<typeof getApiInsuranceProviderCountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInsuranceProviderCount({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInsuranceProviderCountQueryKey(options),
+  })
+
+export const deleteApiInsuranceProviderByIdMutation = (
+  options?: Partial<Options<DeleteApiInsuranceProviderByIdData>>
+): UseMutationOptions<
+  DeleteApiInsuranceProviderByIdResponse,
+  AxiosError<DefaultError>,
+  Options<DeleteApiInsuranceProviderByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiInsuranceProviderByIdResponse,
+    AxiosError<DefaultError>,
+    Options<DeleteApiInsuranceProviderByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiInsuranceProviderById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInsuranceProviderByIdQueryKey = (
+  options: Options<GetApiInsuranceProviderByIdData>
+) => createQueryKey("getApiInsuranceProviderById", options)
+
+export const getApiInsuranceProviderByIdOptions = (
+  options: Options<GetApiInsuranceProviderByIdData>
+) =>
+  queryOptions<
+    GetApiInsuranceProviderByIdResponse,
+    AxiosError<DefaultError>,
+    GetApiInsuranceProviderByIdResponse,
+    ReturnType<typeof getApiInsuranceProviderByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInsuranceProviderById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInsuranceProviderByIdQueryKey(options),
+  })
+
+export const putApiInsuranceProviderByIdMutation = (
+  options?: Partial<Options<PutApiInsuranceProviderByIdData>>
+): UseMutationOptions<
+  PutApiInsuranceProviderByIdResponse,
+  AxiosError<DefaultError>,
+  Options<PutApiInsuranceProviderByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiInsuranceProviderByIdResponse,
+    AxiosError<DefaultError>,
+    Options<PutApiInsuranceProviderByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiInsuranceProviderById({
         ...options,
         ...fnOptions,
         throwOnError: true,

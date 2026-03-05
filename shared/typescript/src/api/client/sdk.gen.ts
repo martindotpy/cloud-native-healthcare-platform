@@ -6,12 +6,30 @@ import type {
   DeleteApiAppointmentByIdData,
   DeleteApiAppointmentByIdErrors,
   DeleteApiAppointmentByIdResponses,
+  DeleteApiClinicalEpisodeByIdData,
+  DeleteApiClinicalEpisodeByIdErrors,
+  DeleteApiClinicalEpisodeByIdResponses,
   DeleteApiDoctorByIdData,
   DeleteApiDoctorByIdErrors,
   DeleteApiDoctorByIdResponses,
   DeleteApiFacilityByIdData,
   DeleteApiFacilityByIdErrors,
   DeleteApiFacilityByIdResponses,
+  DeleteApiHealthRecordByIdData,
+  DeleteApiHealthRecordByIdErrors,
+  DeleteApiHealthRecordByIdResponses,
+  DeleteApiInsuranceInvoiceByIdData,
+  DeleteApiInsuranceInvoiceByIdErrors,
+  DeleteApiInsuranceInvoiceByIdResponses,
+  DeleteApiInsuranceProviderByIdData,
+  DeleteApiInsuranceProviderByIdErrors,
+  DeleteApiInsuranceProviderByIdResponses,
+  DeleteApiPatientByIdData,
+  DeleteApiPatientByIdErrors,
+  DeleteApiPatientByIdResponses,
+  DeleteApiPrescriptionByIdData,
+  DeleteApiPrescriptionByIdErrors,
+  DeleteApiPrescriptionByIdResponses,
   DeleteApiSpecialtyByIdData,
   DeleteApiSpecialtyByIdErrors,
   DeleteApiSpecialtyByIdResponses,
@@ -24,6 +42,15 @@ import type {
   GetApiAppointmentData,
   GetApiAppointmentErrors,
   GetApiAppointmentResponses,
+  GetApiClinicalEpisodeByIdData,
+  GetApiClinicalEpisodeByIdErrors,
+  GetApiClinicalEpisodeByIdResponses,
+  GetApiClinicalEpisodeCountData,
+  GetApiClinicalEpisodeCountErrors,
+  GetApiClinicalEpisodeCountResponses,
+  GetApiClinicalEpisodeData,
+  GetApiClinicalEpisodeErrors,
+  GetApiClinicalEpisodeResponses,
   GetApiDoctorByIdData,
   GetApiDoctorByIdErrors,
   GetApiDoctorByIdResponses,
@@ -42,6 +69,51 @@ import type {
   GetApiFacilityData,
   GetApiFacilityErrors,
   GetApiFacilityResponses,
+  GetApiHealthRecordByIdData,
+  GetApiHealthRecordByIdErrors,
+  GetApiHealthRecordByIdResponses,
+  GetApiHealthRecordCountData,
+  GetApiHealthRecordCountErrors,
+  GetApiHealthRecordCountResponses,
+  GetApiHealthRecordData,
+  GetApiHealthRecordErrors,
+  GetApiHealthRecordResponses,
+  GetApiInsuranceInvoiceByIdData,
+  GetApiInsuranceInvoiceByIdErrors,
+  GetApiInsuranceInvoiceByIdResponses,
+  GetApiInsuranceInvoiceCountData,
+  GetApiInsuranceInvoiceCountErrors,
+  GetApiInsuranceInvoiceCountResponses,
+  GetApiInsuranceInvoiceData,
+  GetApiInsuranceInvoiceErrors,
+  GetApiInsuranceInvoiceResponses,
+  GetApiInsuranceProviderByIdData,
+  GetApiInsuranceProviderByIdErrors,
+  GetApiInsuranceProviderByIdResponses,
+  GetApiInsuranceProviderCountData,
+  GetApiInsuranceProviderCountErrors,
+  GetApiInsuranceProviderCountResponses,
+  GetApiInsuranceProviderData,
+  GetApiInsuranceProviderErrors,
+  GetApiInsuranceProviderResponses,
+  GetApiPatientByIdData,
+  GetApiPatientByIdErrors,
+  GetApiPatientByIdResponses,
+  GetApiPatientCountData,
+  GetApiPatientCountErrors,
+  GetApiPatientCountResponses,
+  GetApiPatientData,
+  GetApiPatientErrors,
+  GetApiPatientResponses,
+  GetApiPrescriptionByIdData,
+  GetApiPrescriptionByIdErrors,
+  GetApiPrescriptionByIdResponses,
+  GetApiPrescriptionCountData,
+  GetApiPrescriptionCountErrors,
+  GetApiPrescriptionCountResponses,
+  GetApiPrescriptionData,
+  GetApiPrescriptionErrors,
+  GetApiPrescriptionResponses,
   GetApiSpecialtyByIdData,
   GetApiSpecialtyByIdErrors,
   GetApiSpecialtyByIdResponses,
@@ -54,24 +126,60 @@ import type {
   PostApiAppointmentData,
   PostApiAppointmentErrors,
   PostApiAppointmentResponses,
+  PostApiClinicalEpisodeData,
+  PostApiClinicalEpisodeErrors,
+  PostApiClinicalEpisodeResponses,
   PostApiDoctorData,
   PostApiDoctorErrors,
   PostApiDoctorResponses,
   PostApiFacilityData,
   PostApiFacilityErrors,
   PostApiFacilityResponses,
+  PostApiHealthRecordData,
+  PostApiHealthRecordErrors,
+  PostApiHealthRecordResponses,
+  PostApiInsuranceInvoiceData,
+  PostApiInsuranceInvoiceErrors,
+  PostApiInsuranceInvoiceResponses,
+  PostApiInsuranceProviderData,
+  PostApiInsuranceProviderErrors,
+  PostApiInsuranceProviderResponses,
+  PostApiPatientData,
+  PostApiPatientErrors,
+  PostApiPatientResponses,
+  PostApiPrescriptionData,
+  PostApiPrescriptionErrors,
+  PostApiPrescriptionResponses,
   PostApiSpecialtyData,
   PostApiSpecialtyErrors,
   PostApiSpecialtyResponses,
   PutApiAppointmentByIdData,
   PutApiAppointmentByIdErrors,
   PutApiAppointmentByIdResponses,
+  PutApiClinicalEpisodeByIdData,
+  PutApiClinicalEpisodeByIdErrors,
+  PutApiClinicalEpisodeByIdResponses,
   PutApiDoctorByIdData,
   PutApiDoctorByIdErrors,
   PutApiDoctorByIdResponses,
   PutApiFacilityByIdData,
   PutApiFacilityByIdErrors,
   PutApiFacilityByIdResponses,
+  PutApiHealthRecordByIdData,
+  PutApiHealthRecordByIdErrors,
+  PutApiHealthRecordByIdResponses,
+  PutApiInsuranceInvoiceByIdData,
+  PutApiInsuranceInvoiceByIdErrors,
+  PutApiInsuranceInvoiceByIdResponses,
+  PutApiInsuranceProviderByIdData,
+  PutApiInsuranceProviderByIdErrors,
+  PutApiInsuranceProviderByIdResponses,
+  PutApiPatientByIdData,
+  PutApiPatientByIdErrors,
+  PutApiPatientByIdResponses,
+  PutApiPrescriptionByIdData,
+  PutApiPrescriptionByIdErrors,
+  PutApiPrescriptionByIdResponses,
   PutApiSpecialtyByIdData,
   PutApiSpecialtyByIdErrors,
   PutApiSpecialtyByIdResponses,
@@ -103,7 +211,6 @@ export const getApiAppointment = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/appointment",
     ...options,
   })
@@ -117,7 +224,6 @@ export const postApiAppointment = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/appointment",
     ...options,
     headers: {
@@ -135,7 +241,6 @@ export const getApiAppointmentCount = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/appointment/count",
     ...options,
   })
@@ -147,11 +252,7 @@ export const deleteApiAppointmentById = <ThrowOnError extends boolean = false>(
     DeleteApiAppointmentByIdResponses,
     DeleteApiAppointmentByIdErrors,
     ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/api/appointment/{id}",
-    ...options,
-  })
+  >({ url: "/api/appointment/{id}", ...options })
 
 export const getApiAppointmentById = <ThrowOnError extends boolean = false>(
   options: Options<GetApiAppointmentByIdData, ThrowOnError>
@@ -162,7 +263,6 @@ export const getApiAppointmentById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/appointment/{id}",
     ...options,
   })
@@ -176,7 +276,6 @@ export const putApiAppointmentById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/appointment/{id}",
     ...options,
     headers: {
@@ -194,7 +293,6 @@ export const getApiDoctor = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/doctor",
     ...options,
   })
@@ -208,7 +306,6 @@ export const postApiDoctor = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/doctor",
     ...options,
     headers: {
@@ -226,7 +323,6 @@ export const getApiDoctorCount = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/doctor/count",
     ...options,
   })
@@ -238,11 +334,7 @@ export const deleteApiDoctorById = <ThrowOnError extends boolean = false>(
     DeleteApiDoctorByIdResponses,
     DeleteApiDoctorByIdErrors,
     ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/api/doctor/{id}",
-    ...options,
-  })
+  >({ url: "/api/doctor/{id}", ...options })
 
 export const getApiDoctorById = <ThrowOnError extends boolean = false>(
   options: Options<GetApiDoctorByIdData, ThrowOnError>
@@ -253,7 +345,6 @@ export const getApiDoctorById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/doctor/{id}",
     ...options,
   })
@@ -267,7 +358,6 @@ export const putApiDoctorById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/doctor/{id}",
     ...options,
     headers: {
@@ -285,7 +375,6 @@ export const getApiFacility = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/facility",
     ...options,
   })
@@ -299,7 +388,6 @@ export const postApiFacility = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/facility",
     ...options,
     headers: {
@@ -317,7 +405,6 @@ export const getApiFacilityCount = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/facility/count",
     ...options,
   })
@@ -329,11 +416,7 @@ export const deleteApiFacilityById = <ThrowOnError extends boolean = false>(
     DeleteApiFacilityByIdResponses,
     DeleteApiFacilityByIdErrors,
     ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/api/facility/{id}",
-    ...options,
-  })
+  >({ url: "/api/facility/{id}", ...options })
 
 export const getApiFacilityById = <ThrowOnError extends boolean = false>(
   options: Options<GetApiFacilityByIdData, ThrowOnError>
@@ -344,7 +427,6 @@ export const getApiFacilityById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/facility/{id}",
     ...options,
   })
@@ -358,7 +440,6 @@ export const putApiFacilityById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/facility/{id}",
     ...options,
     headers: {
@@ -376,7 +457,6 @@ export const getApiSpecialty = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/specialty",
     ...options,
   })
@@ -390,7 +470,6 @@ export const postApiSpecialty = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/specialty",
     ...options,
     headers: {
@@ -408,7 +487,6 @@ export const getApiSpecialtyCount = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/specialty/count",
     ...options,
   })
@@ -420,11 +498,7 @@ export const deleteApiSpecialtyById = <ThrowOnError extends boolean = false>(
     DeleteApiSpecialtyByIdResponses,
     DeleteApiSpecialtyByIdErrors,
     ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/api/specialty/{id}",
-    ...options,
-  })
+  >({ url: "/api/specialty/{id}", ...options })
 
 export const getApiSpecialtyById = <ThrowOnError extends boolean = false>(
   options: Options<GetApiSpecialtyByIdData, ThrowOnError>
@@ -435,7 +509,6 @@ export const getApiSpecialtyById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/specialty/{id}",
     ...options,
   })
@@ -449,8 +522,519 @@ export const putApiSpecialtyById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     responseType: "json",
-    security: [{ scheme: "bearer", type: "http" }],
     url: "/api/specialty/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiClinicalEpisode = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiClinicalEpisodeData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiClinicalEpisodeResponses,
+    GetApiClinicalEpisodeErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/clinical-episode",
+    ...options,
+  })
+
+export const postApiClinicalEpisode = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiClinicalEpisodeData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiClinicalEpisodeResponses,
+    PostApiClinicalEpisodeErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/clinical-episode",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiClinicalEpisodeCount = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiClinicalEpisodeCountData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiClinicalEpisodeCountResponses,
+    GetApiClinicalEpisodeCountErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/clinical-episode/count",
+    ...options,
+  })
+
+export const deleteApiClinicalEpisodeById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiClinicalEpisodeByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiClinicalEpisodeByIdResponses,
+    DeleteApiClinicalEpisodeByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical-episode/{id}", ...options })
+
+export const getApiClinicalEpisodeById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiClinicalEpisodeByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiClinicalEpisodeByIdResponses,
+    GetApiClinicalEpisodeByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/clinical-episode/{id}",
+    ...options,
+  })
+
+export const putApiClinicalEpisodeById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiClinicalEpisodeByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiClinicalEpisodeByIdResponses,
+    PutApiClinicalEpisodeByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/clinical-episode/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiHealthRecord = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiHealthRecordData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiHealthRecordResponses,
+    GetApiHealthRecordErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/health-record",
+    ...options,
+  })
+
+export const postApiHealthRecord = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiHealthRecordData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiHealthRecordResponses,
+    PostApiHealthRecordErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/health-record",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiHealthRecordCount = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiHealthRecordCountData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiHealthRecordCountResponses,
+    GetApiHealthRecordCountErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/health-record/count",
+    ...options,
+  })
+
+export const deleteApiHealthRecordById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiHealthRecordByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiHealthRecordByIdResponses,
+    DeleteApiHealthRecordByIdErrors,
+    ThrowOnError
+  >({ url: "/api/health-record/{id}", ...options })
+
+export const getApiHealthRecordById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiHealthRecordByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiHealthRecordByIdResponses,
+    GetApiHealthRecordByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/health-record/{id}",
+    ...options,
+  })
+
+export const putApiHealthRecordById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiHealthRecordByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiHealthRecordByIdResponses,
+    PutApiHealthRecordByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/health-record/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiPatient = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiPatientData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiPatientResponses,
+    GetApiPatientErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/patient",
+    ...options,
+  })
+
+export const postApiPatient = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiPatientData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiPatientResponses,
+    PostApiPatientErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/patient",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiPatientCount = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiPatientCountData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiPatientCountResponses,
+    GetApiPatientCountErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/patient/count",
+    ...options,
+  })
+
+export const deleteApiPatientById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiPatientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiPatientByIdResponses,
+    DeleteApiPatientByIdErrors,
+    ThrowOnError
+  >({ url: "/api/patient/{id}", ...options })
+
+export const getApiPatientById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiPatientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiPatientByIdResponses,
+    GetApiPatientByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/patient/{id}",
+    ...options,
+  })
+
+export const putApiPatientById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiPatientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiPatientByIdResponses,
+    PutApiPatientByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/patient/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiPrescription = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiPrescriptionData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiPrescriptionResponses,
+    GetApiPrescriptionErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/prescription",
+    ...options,
+  })
+
+export const postApiPrescription = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiPrescriptionData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiPrescriptionResponses,
+    PostApiPrescriptionErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/prescription",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiPrescriptionCount = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiPrescriptionCountData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiPrescriptionCountResponses,
+    GetApiPrescriptionCountErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/prescription/count",
+    ...options,
+  })
+
+export const deleteApiPrescriptionById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiPrescriptionByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiPrescriptionByIdResponses,
+    DeleteApiPrescriptionByIdErrors,
+    ThrowOnError
+  >({ url: "/api/prescription/{id}", ...options })
+
+export const getApiPrescriptionById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiPrescriptionByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiPrescriptionByIdResponses,
+    GetApiPrescriptionByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/prescription/{id}",
+    ...options,
+  })
+
+export const putApiPrescriptionById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiPrescriptionByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiPrescriptionByIdResponses,
+    PutApiPrescriptionByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/prescription/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiInsuranceInvoice = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiInsuranceInvoiceData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiInsuranceInvoiceResponses,
+    GetApiInsuranceInvoiceErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice",
+    ...options,
+  })
+
+export const postApiInsuranceInvoice = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiInsuranceInvoiceData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiInsuranceInvoiceResponses,
+    PostApiInsuranceInvoiceErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiInsuranceInvoiceCount = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiInsuranceInvoiceCountData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiInsuranceInvoiceCountResponses,
+    GetApiInsuranceInvoiceCountErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice/count",
+    ...options,
+  })
+
+export const deleteApiInsuranceInvoiceById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiInsuranceInvoiceByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiInsuranceInvoiceByIdResponses,
+    DeleteApiInsuranceInvoiceByIdErrors,
+    ThrowOnError
+  >({ url: "/api/insurance/invoice/{id}", ...options })
+
+export const getApiInsuranceInvoiceById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiInsuranceInvoiceByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiInsuranceInvoiceByIdResponses,
+    GetApiInsuranceInvoiceByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice/{id}",
+    ...options,
+  })
+
+export const putApiInsuranceInvoiceById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiInsuranceInvoiceByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiInsuranceInvoiceByIdResponses,
+    PutApiInsuranceInvoiceByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiInsuranceProvider = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiInsuranceProviderData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiInsuranceProviderResponses,
+    GetApiInsuranceProviderErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/provider",
+    ...options,
+  })
+
+export const postApiInsuranceProvider = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiInsuranceProviderData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiInsuranceProviderResponses,
+    PostApiInsuranceProviderErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/provider",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+export const getApiInsuranceProviderCount = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiInsuranceProviderCountData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiInsuranceProviderCountResponses,
+    GetApiInsuranceProviderCountErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/provider/count",
+    ...options,
+  })
+
+export const deleteApiInsuranceProviderById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiInsuranceProviderByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiInsuranceProviderByIdResponses,
+    DeleteApiInsuranceProviderByIdErrors,
+    ThrowOnError
+  >({ url: "/api/insurance/provider/{id}", ...options })
+
+export const getApiInsuranceProviderById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiInsuranceProviderByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiInsuranceProviderByIdResponses,
+    GetApiInsuranceProviderByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/provider/{id}",
+    ...options,
+  })
+
+export const putApiInsuranceProviderById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiInsuranceProviderByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiInsuranceProviderByIdResponses,
+    PutApiInsuranceProviderByIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/provider/{id}",
     ...options,
     headers: {
       "Content-Type": "application/json",

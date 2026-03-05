@@ -1,7 +1,11 @@
 import { defineConfig } from "@hey-api/openapi-ts"
 
 export default defineConfig({
-  input: ["http://localhost:8080/api/appointment/openapi.json"],
+  input: [
+    "http://localhost:4321/api/appointment/openapi.json",
+    "http://localhost:4321/api/ehr/openapi.json",
+    "http://localhost:4321/api/insurance/openapi.json",
+  ],
   output: {
     path: "src/api/client",
     postProcess: ["prettier"],
