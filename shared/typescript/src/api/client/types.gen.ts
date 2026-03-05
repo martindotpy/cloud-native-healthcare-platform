@@ -39,6 +39,11 @@ export type OpenapiDoctor = {
   facilities?: Array<OpenapiFacility>
 }
 
+export type OpenapiDoctorAssignmentResponse = {
+  success?: boolean
+  message?: string
+}
+
 export type OpenapiFacility = {
   id: OpenapiUuid
   name: string
@@ -145,6 +150,31 @@ export type OpenapiClinicalEpisode = {
   recordedAt?: OpenapiLocalDateTime
 }
 
+export type OpenapiCreateClinicalEpisodeRequest = {
+  healthRecordId?: OpenapiUuid
+  appointmentId?: OpenapiUuid
+  diagnosis?: string
+  treatmentPlan?: string
+}
+
+export type OpenapiCreateClinicalEpisodeResponse = {
+  success?: boolean
+  message?: string
+  clinicalEpisodeId?: OpenapiUuid
+}
+
+export type OpenapiCreatePrescriptionRequest = {
+  clinicalEpisodeId?: OpenapiUuid
+  medicationDetails?: string
+  instructions?: string
+}
+
+export type OpenapiCreatePrescriptionResponse = {
+  success?: boolean
+  message?: string
+  prescriptionId?: OpenapiUuid
+}
+
 export type OpenapiHealthRecord = {
   id: OpenapiUuid
   status?: OpenapiHealthRecordStatus
@@ -174,6 +204,18 @@ export type OpenapiInvoice = {
   insuranceProvider?: OpenapiInsuranceProvider
   totalAmount: number
   paymentMethod: string
+  issuedAt?: OpenapiLocalDateTime
+}
+
+export type OpenapiInvoiceSummaryResponse = {
+  found?: boolean
+  message?: string
+  invoiceId?: OpenapiUuid
+  appointmentId?: OpenapiUuid
+  insuranceProviderId?: OpenapiUuid
+  insuranceProviderName?: string
+  totalAmount?: number
+  paymentMethod?: string
   issuedAt?: OpenapiLocalDateTime
 }
 
@@ -479,6 +521,68 @@ export type GetApiDoctorCountResponses = {
 
 export type GetApiDoctorCountResponse =
   GetApiDoctorCountResponses[keyof GetApiDoctorCountResponses]
+
+export type PostApiDoctorByDoctorIdFacilityByFacilityIdData = {
+  body?: never
+  path: {
+    doctorId: OpenapiUuid
+    facilityId: OpenapiUuid
+  }
+  query?: never
+  url: "/api/doctor/{doctorId}/facility/{facilityId}"
+}
+
+export type PostApiDoctorByDoctorIdFacilityByFacilityIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type PostApiDoctorByDoctorIdFacilityByFacilityIdResponses = {
+  /**
+   * Assignment result
+   */
+  200: OpenapiDoctorAssignmentResponse
+}
+
+export type PostApiDoctorByDoctorIdFacilityByFacilityIdResponse =
+  PostApiDoctorByDoctorIdFacilityByFacilityIdResponses[keyof PostApiDoctorByDoctorIdFacilityByFacilityIdResponses]
+
+export type PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdData = {
+  body?: never
+  path: {
+    doctorId: OpenapiUuid
+    specialtyId: OpenapiUuid
+  }
+  query?: never
+  url: "/api/doctor/{doctorId}/specialty/{specialtyId}"
+}
+
+export type PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdResponses = {
+  /**
+   * Assignment result
+   */
+  200: OpenapiDoctorAssignmentResponse
+}
+
+export type PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdResponse =
+  PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdResponses[keyof PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdResponses]
 
 export type DeleteApiDoctorByIdData = {
   body?: never
@@ -1019,6 +1123,38 @@ export type GetApiClinicalEpisodeCountResponses = {
 export type GetApiClinicalEpisodeCountResponse =
   GetApiClinicalEpisodeCountResponses[keyof GetApiClinicalEpisodeCountResponses]
 
+export type PostApiClinicalEpisodeRegisterData = {
+  body: OpenapiCreateClinicalEpisodeRequest
+  path?: never
+  query?: never
+  url: "/api/clinical-episode/register"
+}
+
+export type PostApiClinicalEpisodeRegisterErrors = {
+  /**
+   * Bad Request
+   */
+  400: unknown
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type PostApiClinicalEpisodeRegisterResponses = {
+  /**
+   * Clinical episode registration result
+   */
+  200: OpenapiCreateClinicalEpisodeResponse
+}
+
+export type PostApiClinicalEpisodeRegisterResponse =
+  PostApiClinicalEpisodeRegisterResponses[keyof PostApiClinicalEpisodeRegisterResponses]
+
 export type DeleteApiClinicalEpisodeByIdData = {
   body?: never
   path: {
@@ -1557,6 +1693,38 @@ export type GetApiPrescriptionCountResponses = {
 export type GetApiPrescriptionCountResponse =
   GetApiPrescriptionCountResponses[keyof GetApiPrescriptionCountResponses]
 
+export type PostApiPrescriptionRegisterData = {
+  body: OpenapiCreatePrescriptionRequest
+  path?: never
+  query?: never
+  url: "/api/prescription/register"
+}
+
+export type PostApiPrescriptionRegisterErrors = {
+  /**
+   * Bad Request
+   */
+  400: unknown
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type PostApiPrescriptionRegisterResponses = {
+  /**
+   * Prescription registration result
+   */
+  200: OpenapiCreatePrescriptionResponse
+}
+
+export type PostApiPrescriptionRegisterResponse =
+  PostApiPrescriptionRegisterResponses[keyof PostApiPrescriptionRegisterResponses]
+
 export type DeleteApiPrescriptionByIdData = {
   body?: never
   path: {
@@ -1735,6 +1903,36 @@ export type GetApiInsuranceInvoiceCountResponses = {
 
 export type GetApiInsuranceInvoiceCountResponse =
   GetApiInsuranceInvoiceCountResponses[keyof GetApiInsuranceInvoiceCountResponses]
+
+export type GetApiInsuranceInvoiceSummaryByInvoiceIdData = {
+  body?: never
+  path: {
+    invoiceId: OpenapiUuid
+  }
+  query?: never
+  url: "/api/insurance/invoice/summary/{invoiceId}"
+}
+
+export type GetApiInsuranceInvoiceSummaryByInvoiceIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type GetApiInsuranceInvoiceSummaryByInvoiceIdResponses = {
+  /**
+   * Invoice summary
+   */
+  200: OpenapiInvoiceSummaryResponse
+}
+
+export type GetApiInsuranceInvoiceSummaryByInvoiceIdResponse =
+  GetApiInsuranceInvoiceSummaryByInvoiceIdResponses[keyof GetApiInsuranceInvoiceSummaryByInvoiceIdResponses]
 
 export type DeleteApiInsuranceInvoiceByIdData = {
   body?: never

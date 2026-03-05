@@ -25,7 +25,7 @@ function PrivateLayoutComponent() {
     <SidebarProvider>
       <HomeSidebar />
 
-      <SidebarInset className="gap-2.5 p-5">
+      <SidebarInset className="gap-5 p-5">
         <HomeHeader />
 
         <Outlet />

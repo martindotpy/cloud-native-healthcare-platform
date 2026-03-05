@@ -8,12 +8,13 @@ import {
   getApiFacilityOptions,
   getApiPatientOptions,
   postApiAppointmentMutation,
+  postApiAppointmentValidateMutation,
   putApiAppointmentByIdMutation,
 } from "@healthcare/shared/api/client/@tanstack/react-query.gen"
-import { client } from "@healthcare/shared/api/client/client.gen"
 import type {
   OpenapiAppointment,
   OpenapiAppointmentStatus,
+  OpenapiAppointmentValidationResponse,
   OpenapiDoctor,
   OpenapiFacility,
   OpenapiPatient,
@@ -37,9 +38,13 @@ import {
   NativeSelect,
   NativeSelectOption,
 } from "@healthcare/web/core/components/ui/native-select"
+import {
+  SearchableSelect,
+  type SearchableSelectOption,
+} from "@healthcare/web/core/components/ui/searchable-select"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { TbCalendar, TbClockHour4, TbPencil, TbTrash } from "react-icons/tb"
 import { toast } from "sonner"
 
@@ -55,6 +60,18 @@ interface AppointmentFormState {
   facilityId: string
   scheduledAt: string
   status: OpenapiAppointmentStatus
+}
+
+type AgendaValidationStatus =
+  | "idle"
+  | "validating"
+  | "valid"
+  | "invalid"
+  | "error"
+
+interface AgendaValidationState {
+  status: AgendaValidationStatus
+  message: string
 }
 
 const defaultAppointmentForm: AppointmentFormState = {
@@ -85,6 +102,13 @@ const fromInputDateTime = (value: string) => {
   return normalized
 }
 
+const getDoctorSpecialtiesLabel = (doctor: OpenapiDoctor) => {
+  const specialties = doctor.specialties ?? []
+  if (specialties.length === 0) return "Sin especialidades"
+
+  return specialties.map((specialty) => specialty.name).join(", ")
+}
+
 const buildAppointmentBody = (
   form: AppointmentFormState,
   patients: OpenapiPatient[],
@@ -110,6 +134,22 @@ const buildAppointmentBody = (
   } satisfies OpenapiAppointment
 }
 
+const buildAgendaValidationPayload = (
+  form: AppointmentFormState,
+  appointmentId?: string
+) => {
+  if (!form.doctorId || !form.facilityId || !form.scheduledAt) {
+    return null
+  }
+
+  return {
+    doctorId: form.doctorId,
+    facilityId: form.facilityId,
+    scheduledDate: fromInputDateTime(form.scheduledAt),
+    appointmentId,
+  }
+}
+
 const statusStyles: Record<OpenapiAppointmentStatus, string> = {
   pending: "bg-secondary text-secondary-foreground border border-border",
   completed: "bg-primary/15 text-primary border border-primary/30",
@@ -126,14 +166,6 @@ const statusDotStyles: Record<OpenapiAppointmentStatus, string> = {
   pending: "bg-secondary-foreground/70",
   completed: "bg-primary",
   canceled: "bg-destructive",
-}
-
-interface AppointmentValidationResponse {
-  valid: boolean
-  dateInPast: boolean
-  doctorAssignedToFacility: boolean
-  hasConflict: boolean
-  message: string
 }
 
 const getApiErrorMessage = (error: unknown, fallback: string) => {
@@ -184,6 +216,13 @@ function RouteComponent() {
   const [editingAppointment, setEditingAppointment] =
     useState<OpenapiAppointment | null>(null)
   const [form, setForm] = useState<AppointmentFormState>(defaultAppointmentForm)
+  const [agendaValidation, setAgendaValidation] =
+    useState<AgendaValidationState>({
+      status: "idle",
+      message: "Selecciona medico, sede y fecha para validar agenda",
+    })
+  const latestValidationRequestRef = useRef(0)
+  const lastValidatedPayloadRef = useRef("")
 
   const [appointmentToDelete, setAppointmentToDelete] =
     useState<OpenapiAppointment | null>(null)
@@ -298,6 +337,85 @@ function RouteComponent() {
     return { pending, completed, canceled, upcoming48h }
   }, [appointments])
 
+  const doctorFilterOptions = useMemo<SearchableSelectOption[]>(() => {
+    return [
+      { value: "ALL", label: "Todos" },
+      ...((doctors ?? []).map((doctor) => ({
+        value: doctor.id,
+        label: `${doctor.lastName}, ${doctor.firstName}`,
+        keywords: `${doctor.firstName} ${doctor.lastName} ${doctor.medicalLicense}`,
+      })) as SearchableSelectOption[]),
+    ]
+  }, [doctors])
+
+  const facilityFilterOptions = useMemo<SearchableSelectOption[]>(() => {
+    return [
+      { value: "ALL", label: "Todas" },
+      ...((facilities ?? []).map((facility) => ({
+        value: facility.id,
+        label: facility.name,
+        keywords: facility.address,
+      })) as SearchableSelectOption[]),
+    ]
+  }, [facilities])
+
+  const patientOptions = useMemo<SearchableSelectOption[]>(() => {
+    return (patients ?? []).map((patient) => ({
+      value: patient.id,
+      label: `${patient.nationalId} - ${patient.phone}`,
+      keywords: `${patient.nationalId} ${patient.phone}`,
+    })) as SearchableSelectOption[]
+  }, [patients])
+
+  const doctorOptions = useMemo<SearchableSelectOption[]>(() => {
+    return (doctors ?? []).map((doctor) => ({
+      value: doctor.id,
+      label: `Dr. ${doctor.firstName} ${doctor.lastName}`,
+      keywords: `${doctor.firstName} ${doctor.lastName} ${doctor.medicalLicense} ${getDoctorSpecialtiesLabel(doctor)}`,
+    })) as SearchableSelectOption[]
+  }, [doctors])
+
+  const facilityOptions = useMemo<SearchableSelectOption[]>(() => {
+    return (facilities ?? []).map((facility) => ({
+      value: facility.id,
+      label: facility.name,
+      keywords: facility.address,
+    })) as SearchableSelectOption[]
+  }, [facilities])
+
+  const formFacilityOptions = useMemo<SearchableSelectOption[]>(() => {
+    if (!form.doctorId) {
+      return facilityOptions
+    }
+
+    const selectedDoctor = (doctors ?? []).find(
+      (doctor) => doctor.id === form.doctorId
+    )
+
+    const doctorFacilities = selectedDoctor?.facilities ?? []
+
+    return doctorFacilities.map((facility) => ({
+      value: facility.id,
+      label: facility.name,
+      keywords: facility.address,
+    }))
+  }, [doctors, facilityOptions, form.doctorId])
+
+  useEffect(() => {
+    if (!form.facilityId || !form.doctorId) return
+
+    const stillAvailable = formFacilityOptions.some(
+      (facility) => facility.value === form.facilityId
+    )
+
+    if (stillAvailable) return
+
+    setForm((previous) => ({
+      ...previous,
+      facilityId: "",
+    }))
+  }, [form.doctorId, form.facilityId, formFacilityOptions])
+
   const invalidateAppointments = async () => {
     await queryClient.invalidateQueries({
       queryKey: getApiAppointmentQueryKey(),
@@ -355,29 +473,104 @@ function RouteComponent() {
   })
 
   const validateMutation = useMutation({
-    mutationFn: async (payload: {
-      doctorId: string
-      facilityId: string
-      scheduledDate: string
-      appointmentId?: string
-    }) => {
-      const response = await client.post<
-        { 200: AppointmentValidationResponse },
-        never,
-        true
-      >({
-        url: "/api/appointment/validate",
-        body: payload,
-        throwOnError: true,
-        security: [{ type: "http", scheme: "bearer" }],
-      })
-
-      return response.data
-    },
-    onError: () => {
-      toast.error("No se pudo validar la agenda de la cita")
-    },
+    ...postApiAppointmentValidateMutation({
+      security: [{ type: "http", scheme: "bearer" }],
+    }),
   })
+
+  const agendaValidationPayload = useMemo(
+    () => buildAgendaValidationPayload(form, editingAppointment?.id),
+    [form, editingAppointment?.id]
+  )
+
+  const agendaValidationPayloadKey = useMemo(
+    () =>
+      agendaValidationPayload ? JSON.stringify(agendaValidationPayload) : "",
+    [agendaValidationPayload]
+  )
+
+  useEffect(() => {
+    if (!isFormOpen) {
+      setAgendaValidation((previous) => {
+        if (
+          previous.status === "idle" &&
+          previous.message ===
+            "Selecciona medico, sede y fecha para validar agenda"
+        ) {
+          return previous
+        }
+
+        return {
+          status: "idle",
+          message: "Selecciona medico, sede y fecha para validar agenda",
+        }
+      })
+      return
+    }
+
+    if (!agendaValidationPayload) {
+      setAgendaValidation((previous) => {
+        if (
+          previous.status === "idle" &&
+          previous.message ===
+            "Selecciona medico, sede y fecha para validar agenda"
+        ) {
+          return previous
+        }
+
+        return {
+          status: "idle",
+          message: "Selecciona medico, sede y fecha para validar agenda",
+        }
+      })
+      return
+    }
+
+    setAgendaValidation({
+      status: "validating",
+      message: "Validando disponibilidad del medico en esa sede...",
+    })
+
+    const requestId = ++latestValidationRequestRef.current
+
+    const timeoutId = window.setTimeout(async () => {
+      try {
+        const result = await validateMutation.mutateAsync({
+          body: agendaValidationPayload,
+        })
+
+        if (requestId !== latestValidationRequestRef.current) return
+
+        lastValidatedPayloadRef.current = agendaValidationPayloadKey
+
+        if (result.valid) {
+          setAgendaValidation({
+            status: "valid",
+            message: result.message || "Horario disponible",
+          })
+          return
+        }
+
+        setAgendaValidation({
+          status: "invalid",
+          message:
+            result.message ||
+            "El medico no atiende en la sede o ya tiene conflicto de agenda",
+        })
+      } catch {
+        if (requestId !== latestValidationRequestRef.current) return
+
+        setAgendaValidation({
+          status: "error",
+          message: "No se pudo validar la agenda en este momento",
+        })
+      }
+    }, 350)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [isFormOpen, agendaValidationPayload, agendaValidationPayloadKey])
 
   const openCreateDialog = () => {
     setEditingAppointment(null)
@@ -421,18 +614,43 @@ function RouteComponent() {
       return
     }
 
-    const validation = await validateMutation.mutateAsync({
-      doctorId: form.doctorId,
-      facilityId: form.facilityId,
-      scheduledDate: body.scheduledDate,
-      appointmentId: editingAppointment?.id,
-    })
-
-    if (!validation.valid) {
-      toast.error(
-        validation.message || "La cita no cumple las reglas de agenda"
-      )
+    if (agendaValidation.status === "validating") {
+      toast.error("Espera a que termine la validacion de agenda")
       return
+    }
+
+    if (agendaValidation.status === "invalid") {
+      toast.error(agendaValidation.message)
+      return
+    }
+
+    if (agendaValidation.status === "error") {
+      toast.error("No se pudo validar la agenda, intenta de nuevo")
+      return
+    }
+
+    if (
+      agendaValidationPayload &&
+      agendaValidationPayloadKey !== lastValidatedPayloadRef.current
+    ) {
+      const validation: OpenapiAppointmentValidationResponse =
+        await validateMutation.mutateAsync({
+          body: agendaValidationPayload,
+        })
+
+      lastValidatedPayloadRef.current = agendaValidationPayloadKey
+
+      if (!validation.valid) {
+        setAgendaValidation({
+          status: "invalid",
+          message:
+            validation.message || "La cita no cumple las reglas de agenda",
+        })
+        toast.error(
+          validation.message || "La cita no cumple las reglas de agenda"
+        )
+        return
+      }
     }
 
     if (editingAppointment) {
@@ -570,40 +788,30 @@ function RouteComponent() {
 
           <Field className="xl:col-span-1">
             <FieldLabel htmlFor="doctor-filter">Medico</FieldLabel>
-            <NativeSelect
+            <SearchableSelect
               id="doctor-filter"
               value={doctorFilter}
-              onChange={(event) => {
-                setDoctorFilter(event.target.value)
-              }}
+              onValueChange={setDoctorFilter}
+              options={doctorFilterOptions}
+              placeholder="Todos"
+              searchPlaceholder="Buscar medico..."
+              emptyMessage="No hay medicos coincidentes"
               className="w-full"
-            >
-              <NativeSelectOption value="ALL">Todos</NativeSelectOption>
-              {(doctors ?? []).map((doctor) => (
-                <NativeSelectOption key={doctor.id} value={doctor.id}>
-                  {doctor.lastName}, {doctor.firstName}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            />
           </Field>
 
           <Field className="xl:col-span-1">
             <FieldLabel htmlFor="facility-filter">Sede</FieldLabel>
-            <NativeSelect
+            <SearchableSelect
               id="facility-filter"
               value={facilityFilter}
-              onChange={(event) => {
-                setFacilityFilter(event.target.value)
-              }}
+              onValueChange={setFacilityFilter}
+              options={facilityFilterOptions}
+              placeholder="Todas"
+              searchPlaceholder="Buscar sede..."
+              emptyMessage="No hay sedes coincidentes"
               className="w-full"
-            >
-              <NativeSelectOption value="ALL">Todas</NativeSelectOption>
-              {(facilities ?? []).map((facility) => (
-                <NativeSelectOption key={facility.id} value={facility.id}>
-                  {facility.name}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            />
           </Field>
 
           <Field className="xl:col-span-1">
@@ -667,10 +875,22 @@ function RouteComponent() {
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      Dr. {appointment.doctor.firstName}{" "}
-                      {appointment.doctor.lastName}
+                      <div className="font-medium">
+                        Dr. {appointment.doctor.firstName}{" "}
+                        {appointment.doctor.lastName}
+                      </div>
+                      <div className="text-muted-foreground text-xs">
+                        {getDoctorSpecialtiesLabel(appointment.doctor)}
+                      </div>
                     </td>
-                    <td className="px-4 py-3">{appointment.facility.name}</td>
+                    <td className="px-4 py-3">
+                      <div className="font-medium">
+                        {appointment.facility.name}
+                      </div>
+                      <div className="text-muted-foreground text-xs">
+                        {appointment.facility.address}
+                      </div>
+                    </td>
                     <td className="px-4 py-3">
                       {new Date(appointment.scheduledDate).toLocaleString()}
                     </td>
@@ -777,74 +997,67 @@ function RouteComponent() {
           <FieldGroup className="mt-2 gap-3">
             <Field>
               <FieldLabel htmlFor="patientId">Paciente (DNI)</FieldLabel>
-              <NativeSelect
+              <SearchableSelect
                 id="patientId"
                 value={form.patientId}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setForm((previous) => ({
                     ...previous,
-                    patientId: event.target.value,
+                    patientId: value,
                   }))
                 }}
+                options={patientOptions}
+                placeholder="Selecciona un paciente"
+                searchPlaceholder="Buscar por DNI o telefono..."
+                emptyMessage="No hay pacientes coincidentes"
                 className="w-full"
-              >
-                <NativeSelectOption value="">
-                  Selecciona un paciente
-                </NativeSelectOption>
-                {(patients ?? []).map((patient) => (
-                  <NativeSelectOption key={patient.id} value={patient.id}>
-                    {patient.nationalId} - {patient.phone}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              />
             </Field>
 
             <Field>
               <FieldLabel htmlFor="doctorId">Medico</FieldLabel>
-              <NativeSelect
+              <SearchableSelect
                 id="doctorId"
                 value={form.doctorId}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setForm((previous) => ({
                     ...previous,
-                    doctorId: event.target.value,
+                    doctorId: value,
                   }))
                 }}
+                options={doctorOptions}
+                placeholder="Selecciona un medico"
+                searchPlaceholder="Buscar medico..."
+                emptyMessage="No hay medicos coincidentes"
                 className="w-full"
-              >
-                <NativeSelectOption value="">
-                  Selecciona un medico
-                </NativeSelectOption>
-                {(doctors ?? []).map((doctor) => (
-                  <NativeSelectOption key={doctor.id} value={doctor.id}>
-                    Dr. {doctor.firstName} {doctor.lastName}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              />
             </Field>
 
             <Field>
               <FieldLabel htmlFor="facilityId">Sede</FieldLabel>
-              <NativeSelect
+              <SearchableSelect
                 id="facilityId"
                 value={form.facilityId}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setForm((previous) => ({
                     ...previous,
-                    facilityId: event.target.value,
+                    facilityId: value,
                   }))
                 }}
+                options={formFacilityOptions}
+                placeholder={
+                  form.doctorId
+                    ? "Selecciona una sede disponible"
+                    : "Selecciona primero un medico"
+                }
+                searchPlaceholder="Buscar sede..."
+                emptyMessage={
+                  form.doctorId
+                    ? "El medico no tiene sedes disponibles"
+                    : "Selecciona primero un medico"
+                }
                 className="w-full"
-              >
-                <NativeSelectOption value="">
-                  Selecciona una sede
-                </NativeSelectOption>
-                {(facilities ?? []).map((facility) => (
-                  <NativeSelectOption key={facility.id} value={facility.id}>
-                    {facility.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              />
             </Field>
 
             <Field>
@@ -873,7 +1086,7 @@ function RouteComponent() {
                 }}
                 className="w-full"
               >
-                <NativeSelectOption value="PENDING">
+                <NativeSelectOption value="pending">
                   Pendiente
                 </NativeSelectOption>
                 <NativeSelectOption value="completed">
@@ -884,6 +1097,19 @@ function RouteComponent() {
                 </NativeSelectOption>
               </NativeSelect>
             </Field>
+
+            <div
+              className={`rounded-md border px-3 py-2 text-xs ${
+                agendaValidation.status === "valid"
+                  ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                  : agendaValidation.status === "invalid" ||
+                      agendaValidation.status === "error"
+                    ? "border-destructive/30 bg-destructive/10 text-destructive"
+                    : "border-border bg-muted/40 text-muted-foreground"
+              }`}
+            >
+              {agendaValidation.message}
+            </div>
           </FieldGroup>
 
           <div className="mt-4 flex justify-end gap-2">
@@ -899,7 +1125,12 @@ function RouteComponent() {
 
             <Button
               onClick={handleSubmit}
-              disabled={createMutation.isPending || updateMutation.isPending}
+              disabled={
+                createMutation.isPending ||
+                updateMutation.isPending ||
+                agendaValidation.status === "validating" ||
+                agendaValidation.status === "invalid"
+              }
             >
               {createMutation.isPending || updateMutation.isPending
                 ? "Guardando..."
@@ -939,9 +1170,19 @@ function RouteComponent() {
                   {selectedAppointment.doctor.lastName}
                 </p>
 
+                <p className="text-muted-foreground">Especialidades</p>
+                <p className="text-right font-medium">
+                  {getDoctorSpecialtiesLabel(selectedAppointment.doctor)}
+                </p>
+
                 <p className="text-muted-foreground">Sede</p>
                 <p className="text-right font-medium">
                   {selectedAppointment.facility.name}
+                </p>
+
+                <p className="text-muted-foreground">Direccion sede</p>
+                <p className="text-right font-medium">
+                  {selectedAppointment.facility.address}
                 </p>
 
                 <p className="text-muted-foreground">Fecha</p>

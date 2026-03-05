@@ -14,7 +14,13 @@ import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
 import { Route as PublicSignUpRouteImport } from "./routes/_public/sign-up"
 import { Route as PublicLoginRouteImport } from "./routes/_public/login"
+import { Route as PrivateSedesRouteImport } from "./routes/_private/sedes"
+import { Route as PrivateEspecialidadesRouteImport } from "./routes/_private/especialidades"
+import { Route as PrivateEhrRouteImport } from "./routes/_private/ehr"
+import { Route as PrivateDoctoresRouteImport } from "./routes/_private/doctores"
+import { Route as PrivateClientesRouteImport } from "./routes/_private/clientes"
 import { Route as PrivateCitasRouteImport } from "./routes/_private/citas"
+import { Route as PrivateAseguradorasRouteImport } from "./routes/_private/aseguradoras"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: "/_public",
@@ -39,21 +45,63 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: "/login",
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PrivateSedesRoute = PrivateSedesRouteImport.update({
+  id: "/sedes",
+  path: "/sedes",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateEspecialidadesRoute = PrivateEspecialidadesRouteImport.update({
+  id: "/especialidades",
+  path: "/especialidades",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateEhrRoute = PrivateEhrRouteImport.update({
+  id: "/ehr",
+  path: "/ehr",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateDoctoresRoute = PrivateDoctoresRouteImport.update({
+  id: "/doctores",
+  path: "/doctores",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateClientesRoute = PrivateClientesRouteImport.update({
+  id: "/clientes",
+  path: "/clientes",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 const PrivateCitasRoute = PrivateCitasRouteImport.update({
   id: "/citas",
   path: "/citas",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
+const PrivateAseguradorasRoute = PrivateAseguradorasRouteImport.update({
+  id: "/aseguradoras",
+  path: "/aseguradoras",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
+  "/aseguradoras": typeof PrivateAseguradorasRoute
   "/citas": typeof PrivateCitasRoute
+  "/clientes": typeof PrivateClientesRoute
+  "/doctores": typeof PrivateDoctoresRoute
+  "/ehr": typeof PrivateEhrRoute
+  "/especialidades": typeof PrivateEspecialidadesRoute
+  "/sedes": typeof PrivateSedesRoute
   "/login": typeof PublicLoginRoute
   "/sign-up": typeof PublicSignUpRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
+  "/aseguradoras": typeof PrivateAseguradorasRoute
   "/citas": typeof PrivateCitasRoute
+  "/clientes": typeof PrivateClientesRoute
+  "/doctores": typeof PrivateDoctoresRoute
+  "/ehr": typeof PrivateEhrRoute
+  "/especialidades": typeof PrivateEspecialidadesRoute
+  "/sedes": typeof PrivateSedesRoute
   "/login": typeof PublicLoginRoute
   "/sign-up": typeof PublicSignUpRoute
 }
@@ -61,21 +109,53 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
+  "/_private/aseguradoras": typeof PrivateAseguradorasRoute
   "/_private/citas": typeof PrivateCitasRoute
+  "/_private/clientes": typeof PrivateClientesRoute
+  "/_private/doctores": typeof PrivateDoctoresRoute
+  "/_private/ehr": typeof PrivateEhrRoute
+  "/_private/especialidades": typeof PrivateEspecialidadesRoute
+  "/_private/sedes": typeof PrivateSedesRoute
   "/_public/login": typeof PublicLoginRoute
   "/_public/sign-up": typeof PublicSignUpRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/citas" | "/login" | "/sign-up"
+  fullPaths:
+    | "/"
+    | "/aseguradoras"
+    | "/citas"
+    | "/clientes"
+    | "/doctores"
+    | "/ehr"
+    | "/especialidades"
+    | "/sedes"
+    | "/login"
+    | "/sign-up"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/citas" | "/login" | "/sign-up"
+  to:
+    | "/"
+    | "/aseguradoras"
+    | "/citas"
+    | "/clientes"
+    | "/doctores"
+    | "/ehr"
+    | "/especialidades"
+    | "/sedes"
+    | "/login"
+    | "/sign-up"
   id:
     | "__root__"
     | "/_private"
     | "/_public"
+    | "/_private/aseguradoras"
     | "/_private/citas"
+    | "/_private/clientes"
+    | "/_private/doctores"
+    | "/_private/ehr"
+    | "/_private/especialidades"
+    | "/_private/sedes"
     | "/_public/login"
     | "/_public/sign-up"
     | "/_private/"
@@ -123,6 +203,41 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    "/_private/sedes": {
+      id: "/_private/sedes"
+      path: "/sedes"
+      fullPath: "/sedes"
+      preLoaderRoute: typeof PrivateSedesRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    "/_private/especialidades": {
+      id: "/_private/especialidades"
+      path: "/especialidades"
+      fullPath: "/especialidades"
+      preLoaderRoute: typeof PrivateEspecialidadesRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    "/_private/ehr": {
+      id: "/_private/ehr"
+      path: "/ehr"
+      fullPath: "/ehr"
+      preLoaderRoute: typeof PrivateEhrRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    "/_private/doctores": {
+      id: "/_private/doctores"
+      path: "/doctores"
+      fullPath: "/doctores"
+      preLoaderRoute: typeof PrivateDoctoresRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    "/_private/clientes": {
+      id: "/_private/clientes"
+      path: "/clientes"
+      fullPath: "/clientes"
+      preLoaderRoute: typeof PrivateClientesRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
     "/_private/citas": {
       id: "/_private/citas"
       path: "/citas"
@@ -130,16 +245,35 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivateCitasRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
+    "/_private/aseguradoras": {
+      id: "/_private/aseguradoras"
+      path: "/aseguradoras"
+      fullPath: "/aseguradoras"
+      preLoaderRoute: typeof PrivateAseguradorasRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
   }
 }
 
 interface PrivateRouteRouteChildren {
+  PrivateAseguradorasRoute: typeof PrivateAseguradorasRoute
   PrivateCitasRoute: typeof PrivateCitasRoute
+  PrivateClientesRoute: typeof PrivateClientesRoute
+  PrivateDoctoresRoute: typeof PrivateDoctoresRoute
+  PrivateEhrRoute: typeof PrivateEhrRoute
+  PrivateEspecialidadesRoute: typeof PrivateEspecialidadesRoute
+  PrivateSedesRoute: typeof PrivateSedesRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
+  PrivateAseguradorasRoute: PrivateAseguradorasRoute,
   PrivateCitasRoute: PrivateCitasRoute,
+  PrivateClientesRoute: PrivateClientesRoute,
+  PrivateDoctoresRoute: PrivateDoctoresRoute,
+  PrivateEhrRoute: PrivateEhrRoute,
+  PrivateEspecialidadesRoute: PrivateEspecialidadesRoute,
+  PrivateSedesRoute: PrivateSedesRoute,
   PrivateIndexRoute: PrivateIndexRoute,
 }
 

@@ -87,6 +87,9 @@ import type {
   GetApiInsuranceInvoiceData,
   GetApiInsuranceInvoiceErrors,
   GetApiInsuranceInvoiceResponses,
+  GetApiInsuranceInvoiceSummaryByInvoiceIdData,
+  GetApiInsuranceInvoiceSummaryByInvoiceIdErrors,
+  GetApiInsuranceInvoiceSummaryByInvoiceIdResponses,
   GetApiInsuranceProviderByIdData,
   GetApiInsuranceProviderByIdErrors,
   GetApiInsuranceProviderByIdResponses,
@@ -131,7 +134,16 @@ import type {
   PostApiAppointmentValidateResponses,
   PostApiClinicalEpisodeData,
   PostApiClinicalEpisodeErrors,
+  PostApiClinicalEpisodeRegisterData,
+  PostApiClinicalEpisodeRegisterErrors,
+  PostApiClinicalEpisodeRegisterResponses,
   PostApiClinicalEpisodeResponses,
+  PostApiDoctorByDoctorIdFacilityByFacilityIdData,
+  PostApiDoctorByDoctorIdFacilityByFacilityIdErrors,
+  PostApiDoctorByDoctorIdFacilityByFacilityIdResponses,
+  PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdData,
+  PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdErrors,
+  PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdResponses,
   PostApiDoctorData,
   PostApiDoctorErrors,
   PostApiDoctorResponses,
@@ -152,6 +164,9 @@ import type {
   PostApiPatientResponses,
   PostApiPrescriptionData,
   PostApiPrescriptionErrors,
+  PostApiPrescriptionRegisterData,
+  PostApiPrescriptionRegisterErrors,
+  PostApiPrescriptionRegisterResponses,
   PostApiPrescriptionResponses,
   PostApiSpecialtyData,
   PostApiSpecialtyErrors,
@@ -349,6 +364,48 @@ export const getApiDoctorCount = <ThrowOnError extends boolean = false>(
   >({
     responseType: "json",
     url: "/api/doctor/count",
+    ...options,
+  })
+
+/**
+ * Assign a facility to a doctor
+ */
+export const postApiDoctorByDoctorIdFacilityByFacilityId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    PostApiDoctorByDoctorIdFacilityByFacilityIdData,
+    ThrowOnError
+  >
+) =>
+  (options.client ?? client).post<
+    PostApiDoctorByDoctorIdFacilityByFacilityIdResponses,
+    PostApiDoctorByDoctorIdFacilityByFacilityIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/doctor/{doctorId}/facility/{facilityId}",
+    ...options,
+  })
+
+/**
+ * Assign a specialty to a doctor
+ */
+export const postApiDoctorByDoctorIdSpecialtyBySpecialtyId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdData,
+    ThrowOnError
+  >
+) =>
+  (options.client ?? client).post<
+    PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdResponses,
+    PostApiDoctorByDoctorIdSpecialtyBySpecialtyIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/doctor/{doctorId}/specialty/{specialtyId}",
     ...options,
   })
 
@@ -600,6 +657,28 @@ export const getApiClinicalEpisodeCount = <
     ...options,
   })
 
+/**
+ * Register a clinical episode
+ */
+export const postApiClinicalEpisodeRegister = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiClinicalEpisodeRegisterData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiClinicalEpisodeRegisterResponses,
+    PostApiClinicalEpisodeRegisterErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/clinical-episode/register",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
 export const deleteApiClinicalEpisodeById = <
   ThrowOnError extends boolean = false,
 >(
@@ -848,6 +927,28 @@ export const getApiPrescriptionCount = <ThrowOnError extends boolean = false>(
     ...options,
   })
 
+/**
+ * Register a prescription
+ */
+export const postApiPrescriptionRegister = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiPrescriptionRegisterData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiPrescriptionRegisterResponses,
+    PostApiPrescriptionRegisterErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/prescription/register",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
 export const deleteApiPrescriptionById = <ThrowOnError extends boolean = false>(
   options: Options<DeleteApiPrescriptionByIdData, ThrowOnError>
 ) =>
@@ -929,6 +1030,24 @@ export const getApiInsuranceInvoiceCount = <
   >({
     responseType: "json",
     url: "/api/insurance/invoice/count",
+    ...options,
+  })
+
+/**
+ * Get invoice summary
+ */
+export const getApiInsuranceInvoiceSummaryByInvoiceId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiInsuranceInvoiceSummaryByInvoiceIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiInsuranceInvoiceSummaryByInvoiceIdResponses,
+    GetApiInsuranceInvoiceSummaryByInvoiceIdErrors,
+    ThrowOnError
+  >({
+    responseType: "json",
+    url: "/api/insurance/invoice/summary/{invoiceId}",
     ...options,
   })
 
